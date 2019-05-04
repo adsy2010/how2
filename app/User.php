@@ -36,4 +36,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function usergroups()
+    {
+        return $this->hasMany('App\UserGroup', 'id', 'usergroup'); //TODO: Create usergroup database field and add to model
+    }
+
+    public function feedback()
+    {
+        return $this->hasMany('App\Feedback', 'user', 'id');
+    }
+
+    public function guides()
+    {
+        return $this->hasMany('App\Guide', 'publisher', 'id');
+    }
 }
