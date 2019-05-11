@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function usergroups()
     {
-        return $this->hasMany('App\UserGroup', 'id', 'usergroup'); //TODO: Create usergroup database field and add to model
+        return $this->hasMany('App\UserGroup', 'id', 'usergroup');
     }
 
     public function feedback()
