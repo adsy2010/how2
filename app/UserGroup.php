@@ -21,8 +21,8 @@ class UserGroup extends Model
         return $this->hasMany('App\Permissions', 'groupID', 'id');
     }
 
-    public function user()
+    public function members()
     {
-        return $this->hasOne('App\User', 'usergroup', 'id');
+        return $this->hasMany('App\UserGroupMember', 'groupID', 'id');
     }
 }
