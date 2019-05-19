@@ -21,14 +21,19 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //TODO: Adjust the route types from GET to the relevant type
 
-Route::get('/admin/users', function (){ return; })->name('admin.users.list');
-Route::get('/admin/users/{id}/usergroups', function (){ return; })->name('admin.usersgroups.list');
-Route::get('/admin/users/{id}/assigngroup', function (){ return; })->name('admin.usersgroups.assign');
+Route::get('/admin/', 'Admin\AdminController@dashboard')->name('admin.dashboard');
+Route::get('/admin/users', 'Admin\UserController@listUsers')->name('admin.users.list');
+Route::get('/admin/users/{id}', 'Admin\UserController@showuser')->name('admin.users.view');
+//Route::get('/admin/users/{id}/usergroups', function (){ return; })->name('admin.usersgroups.list');
+Route::post('/admin/users/{id}/assigngroup', 'Admin\UserController@addMemberToGroup')->name('admin.usersgroups.assign');
+Route::post('/admin/users/{id}/unassigngroup', 'Admin\UserController@removeMemberFromGroup')->name('admin.usersgroups.unassign');
 
-Route::get('/admin/usergroups', function (){ return; })->name('admin.usergroups.list');
-Route::get('/admin/usergroups/add', function (){ return; })->name('admin.usergroups.add');
-Route::get('/admin/usergroups/{id}/edit', function (){ return; })->name('admin.usergroups.edit');
-Route::get('/admin/usergroups/{id}/delete', function (){ return; })->name('admin.usergroups.delete');
+Route::get('/admin/usergroups', 'Admin\UserGroupController@listGroups')->name('admin.usergroups.list');
+Route::post('/admin/usergroups/add', 'Admin\UserGroupController@createGroup')->name('admin.usergroups.add');
+Route::get('/admin/usergroups/{id}/edit', 'Admin\UserGroupController@showGroup')->name('admin.usergroups.edit');
+Route::post('/admin/usergroups/{id}/edit', 'Admin\UserGroupController@updateGroup')->name('admin.usergroups.update');
+Route::get('/admin/usergroups/{id}/delete', 'Admin\UserGroupController@deleteGroup')->name('admin.usergroups.delete');
+Route::post('/admin/usergroups/{id}/delete', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.deleteconfirm');
 
 Route::get('/admin/approvals', function (){ return; })->name('admin.approvals.list');
 Route::get('/admin/approvals/{id}', function (){ return; })->name('admin.approvals.view');
@@ -36,7 +41,6 @@ Route::get('/admin/approvals/{id}/approve', function (){ return; })->name('admin
 Route::get('/admin/approvals/{id}/reject', function (){ return; })->name('admin.approvals.reject');
 
 
-Route::get('/admin/users', function (){ return; })->name('admin.users.view');
 
 Route::get('/guide/{id}')->name('guide.view');
 Route::get('/guide/{id}/feedback')->name('guide.feedback');

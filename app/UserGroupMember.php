@@ -16,7 +16,7 @@ class UserGroupMember extends Model
         return $this->hasOne('App\User', 'id', 'userID');
     }
 
-    public function group()
+    public function groupInfo()
     {
         return $this->hasOne('App\UserGroup', 'id', 'groupID');
     }

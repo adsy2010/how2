@@ -12,14 +12,55 @@ use Illuminate\Http\Request;
 class UserGroupController extends Controller
 {
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function listGroups()
     {
-        return view('admin.UserGroups');
+        return view('admin.UserGroups', ['groups' => UserGroup::paginate(15)]);
     }
 
-    public function groupInfo()
+    /**
+     * @param Request $request
+     * @param UserGroup $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showGroup(Request $request, UserGroup $id)
     {
-        return view('admin.UserGroup');
+        return view('admin.UserGroup', ['group' => $id]);
+    }
+
+    /**
+     * @param Request $request
+     * @param UserGroup $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateGroup(Request $request, UserGroup $id)
+    {
+        /** TODO: Check language definitions are correct and update as required */
+        if(!$request->isMethod('post'))
+            return redirect()->to(Route('admin.usergroups.list'))
+                ->withErrors(__('admin.error-badmethod'))
+                ->send();
+
+        //Check form data and create group
+        if($this->validate($request, [
+            'name' => 'required|min:3|unique:usergroups'
+        ]))
+        {
+            $id->name = $request->name;
+            $id->save();
+
+            return redirect()->to(Route('admin.usergroups.list'))
+                ->with('success', __('admin.success-addedgroup'))
+                ->send();
+        }
+
+        return redirect()->to(Route('admin.usergroups.list'))
+            ->withInput($request->all())
+            ->withErrors(__('admin.error-addedgroup'))
+            ->send();
     }
 
     /**
@@ -27,26 +68,43 @@ class UserGroupController extends Controller
      */
     public function createGroup(Request $request)
     {
-        //TODO: Add logic to verify creation
-
         if(!$request->isMethod('post'))
-            return; //TODO: Return fail error message
+            return redirect()->to(Route('admin.usergroups.list'))
+                ->withErrors(__('admin.error-badmethod'))
+                ->send();
 
-        UserGroup::create([
+        //Check form data and create group
+        if($this->validate($request, [
+            'name' => 'required|min:3|unique:usergroups'
+        ]))
+        {
+            UserGroup::create([
+                'name' => $request->name
+            ]);
+            return redirect()->to(Route('admin.usergroups.list'))
+                ->with('success', __('admin.success-addedgroup'))
+                ->send();
+        }
 
-        ]);
+        // Emergency escape method if there have been no returns
+        return redirect()->to(Route('admin.usergroups.list'))
+            ->withInput($request->all())
+            ->withErrors(__('admin.error-addedgroup'))
+            ->send();
+
     }
-
 
     /**
      * Delete a user group
      *
      * @param Request $request
      * @param UserGroup $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function deleteGroup(Request $request, UserGroup $id)
     {
         //TODO: Display confirmation, consider consolidating with confirm method
+        return view('admin.usergroupdeleteconfirm', ['group' => $id]);
     }
 
     /**
@@ -57,7 +115,8 @@ class UserGroupController extends Controller
      */
     public function deleteGroupConfirm(Request $request, UserGroup $id)
     {
-
+        //$id->delete();
+        return;
     }
 
 

@@ -1,0 +1,3 @@
+* { font-family: 'Oswald', sans-serif;  }
+.btn-dashboard { min-width: 300px; font-size: xx-large; padding: 25px; }
+.clickable-row { cursor: pointer; }
