@@ -16,7 +16,7 @@ class Category extends Model
     protected $table = 'category';
     protected $fillable = ['name', 'parent'];
 
-    public function parent()
+    public function parentInfo()
     {
         return $this->hasOne('App\Category', 'id', 'parent');
     }

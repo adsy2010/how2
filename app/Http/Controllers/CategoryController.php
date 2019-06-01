@@ -12,12 +12,12 @@ class CategoryController extends Controller
 {
     public function showCreate()
     {
-        return view('category.create');
+        return view('category.add', ['categories' => Category::all()->pluck('name', 'id')]);
     }
 
-    public function showUpdate()
+    public function showUpdate(Request $request, Category $id)
     {
-        return view('category.edit');
+        return view('category.edit', ['categories' => Category::all()->pluck('name', 'id'), 'category' => $id]);
     }
 
     public function showDelete()
@@ -31,13 +31,24 @@ class CategoryController extends Controller
             return redirect()->to(Route('')) //TODO: Fill route name here
                 ->withErrors(__('admin.error-badmethod'))
                 ->send();
+        try{
+            Category::create([
+                'name' => $request->name,
+                'parent' => $request->parent
+            ]);
 
-        Category::create([
-            'name' => $request->name,
-            'parent' => $request->parent
-        ]);
+            return redirect()->to(Route('admin.category.add'))
+                ->with('success', __('category.success-added'))
+                ->send();
+        }
+        catch (Exception $exception)
+        {
+            return redirect()->to(Route('admin.category.add'))
+                ->withInput($request->all())
+                ->withErrors(__('category.error-added'))
+                ->send();
+        }
 
-        return; //TODO: Redirect
     }
 
     public function update(Request $request, Category $id)
@@ -84,8 +95,8 @@ class CategoryController extends Controller
      */
     public function listCategories(Request $request, Category $id = null)
     {
-        $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->get() : $id->children();
-        return view('category.list');
+        $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->get() : $id->children;
+        return view('category.list', ['categories' => $categories, 'category' => $id]);
     }
 
     /**

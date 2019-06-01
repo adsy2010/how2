@@ -22,6 +22,8 @@ return [
     'users' => 'Users',
     'groups' => 'Groups',
     'permissions' => 'Permissions',
+    'categories' => 'Categories',
+    'approvals' => 'Approvals',
 
     /** Success messages */
     'success-addedgroup' => 'Successfully added new group to the database.',

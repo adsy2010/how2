@@ -60,8 +60,9 @@ Route::get('/admin/categories/{id}/delete', 'CategoryController@showDelete')->na
 Route::post('/admin/categories/{id}/delete', 'CategoryController@remove')->name('admin.category.postdelete');
 
 Route::get('/categories', 'CategoryController@listCategories')->name('category.list');
+Route::get('/categories/{id}', 'CategoryController@listCategories')->name('category.list.children');
 Route::get('/categories/tree', 'CategoryController@listCategoryTree')->name('category.tree');
-Route::get('/categories/{id}', 'CategoryController@listGuidesInCategory')->name('category.view');
+//Route::get('/categories/{id}', 'CategoryController@listGuidesInCategory')->name('category.view');
 
 
 

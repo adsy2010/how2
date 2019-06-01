@@ -28,7 +28,7 @@ class UserGroupController extends Controller
      */
     public function showGroup(Request $request, UserGroup $id)
     {
-        $permissions = UserGroupPermission::whereNotIn('id', $id->permissions->pluck('permissionID'))->orderBy('name', 'ASC')->pluck('name');
+        $permissions = UserGroupPermission::whereNotIn('id', $id->permissions->pluck('permissionID'))->orderBy('name', 'ASC')->pluck('name', 'id');
         return view('admin.UserGroup', ['group' => $id, 'permissions' => $permissions]);
     }
 
