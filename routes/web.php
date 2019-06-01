@@ -28,12 +28,21 @@ Route::get('/admin/users/{id}', 'Admin\UserController@showuser')->name('admin.us
 Route::post('/admin/users/{id}/assigngroup', 'Admin\UserController@addMemberToGroup')->name('admin.usersgroups.assign');
 Route::post('/admin/users/{id}/unassigngroup', 'Admin\UserController@removeMemberFromGroup')->name('admin.usersgroups.unassign');
 
+/** Manage user groups */
 Route::get('/admin/usergroups', 'Admin\UserGroupController@listGroups')->name('admin.usergroups.list');
 Route::post('/admin/usergroups/add', 'Admin\UserGroupController@createGroup')->name('admin.usergroups.add');
 Route::get('/admin/usergroups/{id}/edit', 'Admin\UserGroupController@showGroup')->name('admin.usergroups.edit');
 Route::post('/admin/usergroups/{id}/edit', 'Admin\UserGroupController@updateGroup')->name('admin.usergroups.update');
 Route::get('/admin/usergroups/{id}/delete', 'Admin\UserGroupController@deleteGroup')->name('admin.usergroups.delete');
 Route::post('/admin/usergroups/{id}/delete', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.deleteconfirm');
+
+Route::get('/admin/usergroups/{id}/assignpermission', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.permission.assign');
+Route::get('/admin/usergroups/{id}/removepermission', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.permission.unassign');
+
+/** Manage permissions */
+Route::get('/admin/permissions', 'Admin\UserGroupPermissionsController@listPermissions')->name('admin.permissions.list');
+Route::get('/admin/permissions/{id}', 'Admin\UserGroupPermissionsController@showPermissions')->name('admin.permissions.view');
+Route::post('/admin/permissions/add', 'Admin\UserGroupPermissionsController@addPermission')->name('admin.permissions.add');
 
 Route::get('/admin/approvals', function (){ return; })->name('admin.approvals.list');
 Route::get('/admin/approvals/{id}', function (){ return; })->name('admin.approvals.view');

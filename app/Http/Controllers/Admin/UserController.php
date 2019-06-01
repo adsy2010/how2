@@ -47,7 +47,7 @@ class UserController extends Controller
         }
         catch (Exception $exception)
         {
-            die($exception->getMessage());
+            //die($exception->getMessage());
             // Emergency escape method if there have been no returns
             return redirect()->to(Route('admin.users.view', ['id' => $request->id]))
                 ->withInput($request->all())

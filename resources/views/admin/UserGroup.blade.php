@@ -24,6 +24,41 @@
             </div>
         </fieldset>
         {{ Form::close() }}
+
+        <h4>Add permission to group</h4>
+        {{ Form::open(['route' => ['admin.usersgroups.assign', $group->id]]) }}
+        <div class="row">
+            <div class="col-md-9">{{ Form::select('group', $permissions, null, ['class' => 'form-control']) }}</div>
+            <div class="col-md-3">{{ Form::submit(__('admin.btn-addtogroup'), ['class' => 'btn btn-primary w-100']) }}</div>
+        </div>
+        {{ Form::close() }}
+
+        <hr>
+        <h4>Assigned Permissions</h4>
+        <table class="table table-hover">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Options</th>
+            </tr>
+
+            @foreach($group->permissions->pluck('permissions') as $permission)
+                <tr>
+                    <td>{{ $permission->first()->id }}</td>
+                    <td>{{ $permission->first()->name }}</td>
+                    <td>
+                        {{ Form::open(['route' => ['admin.usersgroups.unassign', 'id' => $permission->first()->id]]  ) }}
+                        {{ Form::hidden('groupID', $permission->first()->id) }}
+                        {{ Form::button('<span class="fas fa-trash"></span> Remove from group', ['type' => 'submit','class' => 'btn btn-danger']) }}
+                        {{ Form::close() }}
+                    </td>
+                </tr>
+
+            @endforeach
+
+        </table>
+
+
         <hr>
         <h4>Group members</h4>
         <table class="table table-hover">

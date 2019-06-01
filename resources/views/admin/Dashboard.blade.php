@@ -7,6 +7,7 @@
         <div class="row">
             <div class="col-md-4 cols-sm-6"><a href="{{ Route('admin.users.list') }}" class="btn btn-primary btn-dashboard">@lang('admin.users')</a></div>
             <div class="col-md-4 cols-sm-6"><a href="{{ Route('admin.usergroups.list') }}" class="btn btn-primary btn-dashboard">@lang('admin.groups')</a></div>
+            <div class="col-md-4 cols-sm-6"><a href="{{ Route('admin.permissions.list') }}" class="btn btn-primary btn-dashboard">@lang('admin.permissions')</a></div>
         </div>
 
     </div>
