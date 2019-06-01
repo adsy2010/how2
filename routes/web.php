@@ -50,6 +50,17 @@ Route::get('/admin/approvals/{id}/approve', function (){ return; })->name('admin
 Route::get('/admin/approvals/{id}/reject', function (){ return; })->name('admin.approvals.reject');
 
 
+/** Categories */
+Route::get('/admin/categories')->name('admin.category.list');
+Route::get('/admin/categories/add')->name('admin.category.add');
+Route::get('/admin/categories/{id}/edit')->name('admin.category.edit');
+Route::get('/admin/categories/{id}/delete')->name('admin.category.delete');
+
+Route::get('/categories')->name('category.list');
+Route::get('/categories/tree')->name('category.tree');
+Route::get('/categories/{id}')->name('category.view');
+
+
 
 Route::get('/guide/{id}')->name('guide.view');
 Route::get('/guide/{id}/feedback')->name('guide.feedback');
