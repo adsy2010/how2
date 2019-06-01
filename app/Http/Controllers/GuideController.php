@@ -20,4 +20,9 @@ class GuideController extends Controller
     {
 
     }
+
+    public function feedback()
+    {
+        
+    }
 }

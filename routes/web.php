@@ -52,13 +52,16 @@ Route::get('/admin/approvals/{id}/reject', function (){ return; })->name('admin.
 
 /** Categories */
 Route::get('/admin/categories')->name('admin.category.list');
-Route::get('/admin/categories/add')->name('admin.category.add');
-Route::get('/admin/categories/{id}/edit')->name('admin.category.edit');
-Route::get('/admin/categories/{id}/delete')->name('admin.category.delete');
+Route::get('/admin/categories/add', 'CategoryController@showCreate')->name('admin.category.add');
+Route::post('/admin/categories/add', 'CategoryController@create')->name('admin.category.postadd');
+Route::get('/admin/categories/{id}/edit', 'CategoryController@showUpdate')->name('admin.category.edit');
+Route::post('/admin/categories/{id}/edit', 'CategoryController@update')->name('admin.category.postedit');
+Route::get('/admin/categories/{id}/delete', 'CategoryController@showDelete')->name('admin.category.delete');
+Route::post('/admin/categories/{id}/delete', 'CategoryController@remove')->name('admin.category.postdelete');
 
-Route::get('/categories')->name('category.list');
-Route::get('/categories/tree')->name('category.tree');
-Route::get('/categories/{id}')->name('category.view');
+Route::get('/categories', 'CategoryController@listCategories')->name('category.list');
+Route::get('/categories/tree', 'CategoryController@listCategoryTree')->name('category.tree');
+Route::get('/categories/{id}', 'CategoryController@listGuidesInCategory')->name('category.view');
 
 
 

@@ -10,6 +10,21 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function showCreate()
+    {
+        return view('category.create');
+    }
+
+    public function showUpdate()
+    {
+        return view('category.edit');
+    }
+
+    public function showDelete()
+    {
+        return view('category.delete');
+    }
+
     public function create(Request $request)
     {
         if(!$request->isMethod('post'))
@@ -70,7 +85,7 @@ class CategoryController extends Controller
     public function listCategories(Request $request, Category $id = null)
     {
         $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->get() : $id->children();
-
+        return view('category.list');
     }
 
     /**
@@ -79,10 +94,11 @@ class CategoryController extends Controller
     public function listCategoryTree()
     {
 //https://itsolutionstuff.com/post/laravel-5-category-treeview-hierarchical-structure-example-with-demoexample.html
+        return view('category.tree');
     }
 
     public function listGuidesInCategory()
     {
-
+        return view('category.view');
     }
 }
