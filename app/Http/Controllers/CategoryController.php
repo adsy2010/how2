@@ -61,11 +61,16 @@ class CategoryController extends Controller
             $id->name = $request->name;
             $id->parent = $request->parent;
             $id->save();
-            return; //TODO: Redirect
+            return redirect()->to(Route('admin.category.edit'))
+                ->with('success', __('category.success-updated'))
+                ->send();
         }
         catch (Exception $exception)
         {
-            return; //TODO: Redirect
+            return redirect()->to(Route('admin.category.edit'))
+                ->withInput($request->all())
+                ->withErrors(__('category.error-updated'))
+                ->send();
         }
     }
 
@@ -80,11 +85,16 @@ class CategoryController extends Controller
         try{
             //TODO: Run this once checks are completed
             //$id->delete();
-            return; //TODO: Redirect
+            return redirect()->to(Route('category.list'))
+                ->with('success', __('category.success-deleted'))
+                ->send();
         }
         catch (Exception $exception)
         {
-            return; //TODO: Redirect
+            return redirect()->to(Route('admin.category.delete'))
+                ->withInput($request->all())
+                ->withErrors(__('category.error-deleted'))
+                ->send();
         }
 
         //TODO: check its empty before removing or else fail OR move all under category to new one

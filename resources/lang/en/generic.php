@@ -11,4 +11,6 @@ return [
     'email' => 'Email',
     'created' => 'Created',
     'updated' => 'Updated',
+
+    'home' => 'Home'
 ];

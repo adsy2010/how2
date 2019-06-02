@@ -37,8 +37,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link" href="">Make submission</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Categories</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ Route('guide.add') }}">Make submission</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ Route('category.list') }}">Categories</a></li>
                         <li class="nav-item"><a class="nav-link" href="">My lists</a></li>
                     </ul>
 

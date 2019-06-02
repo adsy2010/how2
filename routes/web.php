@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('root');
 
 Auth::routes();
 
@@ -66,7 +66,8 @@ Route::get('/categories/tree', 'CategoryController@listCategoryTree')->name('cat
 
 
 
-Route::get('/guide/{id}')->name('guide.view');
+Route::get('/guide/new', 'GuideController@showCreate')->name('guide.add');
+Route::get('/guide/{id}', 'GuideController@show')->name('guide.view');
 Route::get('/guide/{id}/feedback')->name('guide.feedback');
 
 

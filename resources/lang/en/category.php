@@ -9,8 +9,13 @@ return [
     'treeTitle' => 'Category tree',
     'viewTitle' => 'View category',
 
+    /** Status messages */
     'success-added' => 'Category successfully added to the database',
-    'error-added' => 'Category not added to the database. Is the category unique?',
+    'success-updated' => 'Category successfully updated in the database',
+    'success-deleted' => 'Category successfully removed from the database',
+    'error-added' => 'Category not added to the database. Is the category name unique?',
+    'error-updated' => 'Category not updated. Is the category name unique?',
+    'error-deleted' => 'Category not removed from the database.',
 
     /** Buttons */
     'addBtn' => 'Add',
