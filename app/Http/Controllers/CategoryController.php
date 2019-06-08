@@ -28,7 +28,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         if(!$request->isMethod('post'))
-            return redirect()->to(Route('')) //TODO: Fill route name here
+            return redirect()->to(Route('category.list'))
                 ->withErrors(__('admin.error-badmethod'))
                 ->send();
         try{
@@ -54,7 +54,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $id)
     {
         if(!$request->isMethod('post'))
-            return redirect()->to(Route('')) //TODO: Fill route name here
+            return redirect()->to(Route('category.list'))
             ->withErrors(__('admin.error-badmethod'))
                 ->send();
         try{
@@ -77,7 +77,7 @@ class CategoryController extends Controller
     public function remove(Request $request, Category $id)
     {
         if(!$request->isMethod('post'))
-            return redirect()->to(Route('')) //TODO: Fill route name here
+            return redirect()->to(Route('category.list'))
             ->withErrors(__('admin.error-badmethod'))
                 ->send();
 

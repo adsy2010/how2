@@ -23,4 +23,7 @@ return [
     'tooManyStepsInformation' => 'Added too many steps? Don\'t fill them in and they will automatically be removed on submission.',
 
     'addStepBtn' => 'Add another step',
+
+    'success-rating' => 'Thank you for your rating',
+    'success-feedback' => 'Thank you for your feedback'
 ];

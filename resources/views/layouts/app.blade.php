@@ -15,7 +15,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">

@@ -9,13 +9,26 @@ use App\Feedback;
 use App\Guide;
 use App\Steps;
 use App\SupplementaryContent;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GuideController extends Controller
 {
     public function showCreate()
     {
         return view('guides.add');
+    }
+
+    public function unpublish(Request $request, Guide $id)
+    {
+        //unpublish removes from searchable results and requires approval again before being republished.
+        $id->published = 0;
+        $id->draft = 1;
+        $id->publishedTime = null;
+        $id->save();
+
+        return; // redirect to homepage?
     }
 
     public function submit(Request $request)
@@ -26,19 +39,22 @@ class GuideController extends Controller
         //TODO: Add to approval list
 
         if (!$request->isMethod('post'))
-            return redirect()->to(Route(''))//TODO: Fill route name here
-            ->withErrors(__('admin.error-badmethod'))
+            return redirect()->to(Route('home'))
+                ->withErrors(__('admin.error-badmethod'))
                 ->send();
 
-        Guide::create([
+        $guide = Guide::create([
             'name',
-            'publisher',
+            'publisher' => Auth::id(),
             'category',
             'draft' => 1,
             'published' => 0,
             'tags',
             'restrictedGroup',
         ]);
+
+        $guide->save();
+
         //run a foreach step or something
 
         $i = 1;
@@ -48,26 +64,47 @@ class GuideController extends Controller
         while (!empty($request->$stepContentCounter))
         {
             $stepContentCounter = 'stepContent' . $i;
-            Steps::create([
+            $supplementaryContent = 'supplementaryContent' . $i;
 
+            //Create the step
+            $step = Steps::create([
+                'stepNumber' => $i,
+                'stepContent' => $request->$stepContentCounter,
+                'guide' => $guide->id
             ]);
 
-
-            if($supplementaryContentExists) // TODO: get the correct content and check it
+            //If file is attached, create supplementary content
+            if($request->hasFile($supplementaryContent)) // TODO: get the correct content and check it
             {
-                //run a foreach on each step creation adding uploaded content if required
-                SupplementaryContent::create([
+                try{
+                    //storage /guide/content/guideID/Step
+                    $path = "guide/content/{$guide->id}/$i";
+                    $request->file($supplementaryContent)->store($path);
+                    $mime = $request->file($supplementaryContent)->getMimeType();
+                    $datatype = (substr($mime, 0, strlen('video')) === 'video') ? 1 : 0;
 
-                ]);
+                    //run a foreach on each step creation adding uploaded content if required
+                    SupplementaryContent::create([
+                        'step' => $step->id,
+                        'contentLocation' => $path,
+                        'dataType' => $datatype
+                    ]);
+                }
+                catch (Exception $exception)
+                {
+                    //problem with supplementary content
+                }
+
             }
             $i++;
         }
 
 
+
         // Assuming we got this far, submit as an approval. Consider this as an optional step.
         Approval::create([
-            'user',
-            'guide'
+            'user' => Auth::id(),
+            'guide' => $guide->id
         ]);
 
         return; //redirect on success or failure
@@ -97,24 +134,29 @@ class GuideController extends Controller
         if($request->unhelpful)
             $id->unhelpful++;
         $id->save();
-        return redirect()->to(Route('')) // TODO: fill in redirection route
-            ->with('success', __('guide.success-rating'))
+
+        // Use from an API link?
+        return redirect()->to(Route('guide.view', ['id' => $id->id]))
+            ->with('success', __('guides.success-rating'))
             ->send();
 
     }
 
-    public function feedback(Request $request)
+    public function feedback(Request $request, Guide $id)
     {
-        //TODO: create feedback on guide and link to guide
         if(!$request->isMethod('post'))
-            return redirect()->to(Route('')) //TODO: Fill route name here
+            return redirect()->to(Route('guide.view', ['id' => $id->id])) //TODO: Fill route name here
             ->withErrors(__('admin.error-badmethod'))
                 ->send();
 
         Feedback::create([
             'user' => Auth::id(),
-            'guide' => $request->guide,
+            'guide' => $id->id,
             'comment' => $request->comment
         ]);
+
+        return redirect()->to(Route('guide.view', ['id' => $id->id]))
+            ->with('success', __('guides.success-feedback'))
+            ->send();
     }
 }
