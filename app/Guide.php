@@ -32,7 +32,7 @@ class Guide extends Model
         return $this->hasOne('App\User', 'id', 'publisher');
     }
 
-    public function category()
+    public function categoryInfo()
     {
         return $this->hasOne('App\Category', 'id', 'category');
     }

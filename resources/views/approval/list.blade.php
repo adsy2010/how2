@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h4>@lang('guides.addTitle')</h4>
+        <h4>@lang('approvals.listTitle')</h4>
     @php
         //separating the data from the template
         $breadcrumbs = [
@@ -32,6 +32,7 @@
                 <a href="" class="btn btn-primary"><span class="fas fa-times"></span> Reject</a>
             </td>
         </tr>
+        @endforeach
     </table>
     </div>
 

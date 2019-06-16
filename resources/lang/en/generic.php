@@ -12,5 +12,7 @@ return [
     'created' => 'Created',
     'updated' => 'Updated',
 
-    'home' => 'Home'
+    'home' => 'Home',
+
+    'required' => '<span style="color:red;">*</span>'
 ];

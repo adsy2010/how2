@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Approval;
+use App\Category;
 use App\Feedback;
 use App\Guide;
 use App\Steps;
@@ -17,7 +18,7 @@ class GuideController extends Controller
 {
     public function showCreate()
     {
-        return view('guides.add');
+        return view('guides.add', ['categories' => Category::orderBy('name', 'ASC')->get()->pluck('name', 'id')]);
     }
 
     public function unpublish(Request $request, Guide $id)
@@ -43,14 +44,23 @@ class GuideController extends Controller
                 ->withErrors(__('admin.error-badmethod'))
                 ->send();
 
+        $this->validate($request,
+            [
+                'name' => 'required|min:3|unique:guide',
+                'category' => 'required|exists:category,id'
+            ]);
+
+        $tags = (!empty($request->tags)) ? $request->tags : '';
+        $restrictedGroup = (!empty($request->tags)) ? $request->restrictedGroup : '';
+
         $guide = Guide::create([
-            'name',
+            'name' => $request->name,
             'publisher' => Auth::id(),
-            'category',
+            'category' => $request->category,
             'draft' => 1,
             'published' => 0,
-            'tags',
-            'restrictedGroup',
+            'tags' => $tags,
+            'restrictedGroup' => $restrictedGroup,
         ]);
 
         $guide->save();
@@ -60,8 +70,16 @@ class GuideController extends Controller
         $i = 1;
         $stepContentCounter = 'stepContent' . $i;
 
-
-        while (!empty($request->$stepContentCounter))
+        foreach ($request->step['content'] as $key => $value)
+        {
+            $step = Steps::create([
+                'stepNumber' => $key+1,
+                'stepContent' => $value,
+                'guide' => $guide->id
+            ]);
+        }
+        die();
+        /*while (!empty($request->$stepContentCounter))
         {
             $stepContentCounter = 'stepContent' . $i;
             $supplementaryContent = 'supplementaryContent' . $i;
@@ -97,26 +115,27 @@ class GuideController extends Controller
 
             }
             $i++;
-        }
+        }*/
 
 
 
         // Assuming we got this far, submit as an approval. Consider this as an optional step.
-        Approval::create([
+
+        /*Approval::create([
             'user' => Auth::id(),
             'guide' => $guide->id
-        ]);
+        ]);*/
 
-        return; //redirect on success or failure
+        return redirect()->back(); //redirect on success or failure
 
     }
 
-    public function show(Request $request)//, Guide $id)
+    public function show(Request $request, Guide $id)
     {
         //TODO: Pull guide and steps with supplementary content
         //if($id->isEmpty())
           //  return redirect()->to(Route('root'))->withErrors('Guide does not exist')->send();
-        return view('guides.view');//, ['guide' => $id]);
+        return view('guides.view', ['guide' => $id]);
     }
 
     public function update()
@@ -136,10 +155,16 @@ class GuideController extends Controller
         $id->save();
 
         // Use from an API link?
+        /*
         return redirect()->to(Route('guide.view', ['id' => $id->id]))
             ->with('success', __('guides.success-rating'))
-            ->send();
+            ->send();*/
 
+    }
+
+    public function guideData(Request $request, Guide $id)
+    {
+        return $id;
     }
 
     public function feedback(Request $request, Guide $id)

@@ -28,14 +28,14 @@
         <hr>
         <div id="guide-general">
             <div class="row">
-                <div class="col-md-2">{{ Form::label('name', __('guides.nameLabel')) }}</div>
+                <div class="col-md-2">{{ Form::label('name', __('guides.nameLabel')) }} @lang('generic.required')</div>
                 <div class="col-md-10">{{ Form::text('name', null, ['class' => 'form-control']) }}</div>
             </div>
             <hr>
 
             <div class="row">
-                <div class="col-md-2">{{ Form::label('category', __('guides.categoryLabel')) }}</div>
-                <div class="col-md-10">{{ Form::select('category', [], null, ['class' => 'form-control']) }}</div>
+                <div class="col-md-2">{{ Form::label('category', __('guides.categoryLabel')) }} @lang('generic.required')</div>
+                <div class="col-md-10">{{ Form::select('category', $categories, null, ['class' => 'form-control']) }}</div>
             </div>
             <hr>
 
@@ -56,19 +56,20 @@
         <div id="guide-steps">
 
             <div class="row" id="steps-header">
-                <div class="col-md-1">#</div>
-                <div class="col-md-9">@lang('guides.contentLabel')</div>
+                <div class="col-md-10">@lang('guides.contentLabel')</div>
                 <div class="col-md-2">@lang('guides.supplementaryLabel')</div>
             </div>
             <br>
-            <div class="row" id="steps-header">
-                <div class="col-md-1">1{{ Form::hidden('step1', 1) }}</div>
-                <div class="col-md-9">{{ Form::textarea('stepContent1', null,  ['class' => 'form-control', 'rows' => 2]) }}</div>
-                <div class="col-md-2">{{ Form::file('supplementaryContent1') }}</div>
+            <div id="steplist">
+                <div class="row step">
+                    <div class="col-md-10">{{ Form::textarea('step[content][]', null,  ['class' => 'form-control', 'rows' => 2]) }}</div>
+                    <div class="col-md-2">{{ Form::file('step[supplementary][]') }}</div>
+                </div>
+                <hr>
             </div>
-            <hr>
 
-            <div><a href="" class="btn btn-outline-secondary float-right">@lang('guides.addStepBtn')</a> @lang('guides.tooManyStepsInformation')</div>
+
+            <div class="p-2"><a onclick="addStep()" class="btn btn-outline-primary float-right">@lang('guides.addStepBtn')</a> @lang('guides.tooManyStepsInformation')</div>
         </div>
         <hr>
 

@@ -2,3 +2,6 @@
 h1, h2, h3, h4 { font-family: 'Arvo', serif }
 .btn-dashboard { min-width: 300px; font-size: xx-large; padding: 25px; }
 .clickable-row { cursor: pointer; }
+
+.steps:nth-child(even) { background: #a4bacb; }
+.steps:nth-child(odd) { background: #c7e2f6; }
