@@ -13,11 +13,13 @@ return [
     'informationTitle' => 'Information',
 
     'nameLabel' => 'Guide Name',
-    'categoryLabel' => 'Select a category',
+    'selectCategoryLabel' => 'Select a category',
     'contentLabel' => 'Content',
     'restrictLabel' => 'Restrict to group',
     'supplementaryLabel' => 'Supplementary',
     'tagLabel' => 'Tags',
+    'categoryLabel' => 'Category',
+    'stepLabel' => 'Step',
 
     'addInformation' => 'Fill in the form below. Ensure that all fields marked with a red <span class="text-danger">*</span> are filled in before submitting.',
     'tooManyStepsInformation' => 'Added too many steps? Don\'t fill them in and they will automatically be removed on submission. 

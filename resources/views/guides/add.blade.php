@@ -34,7 +34,7 @@
             <hr>
 
             <div class="row">
-                <div class="col-md-2">{{ Form::label('category', __('guides.categoryLabel')) }} @lang('generic.required')</div>
+                <div class="col-md-2">{{ Form::label('category', __('guides.selectCategoryLabel')) }} @lang('generic.required')</div>
                 <div class="col-md-10">{{ Form::select('category', $categories, null, ['class' => 'form-control']) }}</div>
             </div>
             <hr>

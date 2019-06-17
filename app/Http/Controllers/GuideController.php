@@ -44,6 +44,8 @@ class GuideController extends Controller
                 ->withErrors(__('admin.error-badmethod'))
                 ->send();
 
+        //TODO: use validation properly
+
         $this->validate($request,
             [
                 'name' => 'required|min:3|unique:guide',
@@ -174,14 +176,22 @@ class GuideController extends Controller
             ->withErrors(__('admin.error-badmethod'))
                 ->send();
 
-        Feedback::create([
-            'user' => Auth::id(),
-            'guide' => $id->id,
-            'comment' => $request->comment
-        ]);
+        if($this->validate($request, [
+            'feedback' => 'required|min:5'
+        ]))
+        {
+            Feedback::create([
+                'user' => Auth::id(),
+                'guide' => $id->id,
+                'comment' => $request->feedback
+            ]);
 
-        return redirect()->to(Route('guide.view', ['id' => $id->id]))
-            ->with('success', __('guides.success-feedback'))
-            ->send();
+            return redirect()->to(Route('guide.view', ['id' => $id->id]))
+                ->with('success', __('guides.success-feedback'))
+                ->send();
+        }
+
+        return;//TODO: return errors
+
     }
 }

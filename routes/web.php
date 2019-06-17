@@ -69,7 +69,7 @@ Route::get('/categories/tree', 'CategoryController@listCategoryTree')->name('cat
 Route::get('/guide/new', 'GuideController@showCreate')->name('guide.add');
 Route::post('/guide/new', 'GuideController@submit')->name('guide.submit');
 Route::get('/guide/{id}', 'GuideController@show')->name('guide.view');
-Route::get('/guide/{id}/feedback')->name('guide.feedback');
+Route::get('/guide/{id}/feedback', 'GuideController@feedback')->name('guide.feedback');
 Route::post('/guide/{id}/rate', 'GuideController@rate')->name('guide.rate');
 
 

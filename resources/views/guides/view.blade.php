@@ -42,15 +42,15 @@
         </fieldset>
 
         <hr>
-        Category: {{ $guide->categoryInfo->name }}<br>
-        Tags: {{ (!empty($guide->tags)) ? $guide->tags : 'No tags defined for this guide' }}
+        @lang('guides.categoryLabel'): {{ $guide->categoryInfo->name }}<br>
+        @lang('guides.tagLabel'): {{ (!empty($guide->tags)) ? $guide->tags : 'No tags defined for this guide' }}
 
         <hr>
         <h2>@lang('guides.stepsTitle')</h2>
         <hr>
         @foreach($guide->steps as $step)
             <div class="row steps p-2 m-2 rounded">
-                    <div class="col-md-2" style="vertical-align: middle; " ><p class="lead">Step # {{ $step->stepNumber }}</p></div>
+                    <div class="col-md-2" style="vertical-align: middle; " ><p class="lead">@lang('guides.stepLabel') # {{ $step->stepNumber }}</p></div>
                     <div class="col-md-8"><p class="lead" style="font-size: 20px; text-align: justify; ">{{ $step->stepContent }}</p></div>
                     <div class="col-md-2"><img class="img-thumbnail" src="https://via.placeholder.com/150" /></div>
             </div>
@@ -59,7 +59,7 @@
         <hr>
         <h2>@lang('guides.feedbackTitle')</h2>
         <hr>
-        {{ Form::open() }}
+        {{ Form::open(['url' => Route('guide.feedback', ['id' => $guide->id])]) }}
         {{ Form::textarea('feedback', null, ['rows' => 2,'class' => 'form-control']) }}
         {{ Form::submit('Send feedback to author', ['class' => 'btn btn-primary']) }}
         {{ Form::close() }}
