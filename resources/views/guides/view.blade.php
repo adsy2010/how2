@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="container">
-        <h4>@lang('category.listTitle')</h4>
+        <h4>@lang('guides.title')</h4>
         @php
             //separating the data from the template
             $breadcrumbs = [
                 ['title' => __('generic.home'), 'route' => 'root'], //change to homepage
-                ['title' => __('category.listTitle'), 'route' => 'category.list'], //show current category
-                ['title' => __('category.listTitle'), 'route' => 'category.list'] //show current guide name
-            ];
+                ['title' => __('guides.title'), 'route' => 'category.list'], //show current category
+                ['title' => $guide->name, 'route' => 'category.list'] //show current guide name
+            ]; //fix links
         @endphp
         @include('common.errors')
         @include('common.success')
@@ -20,11 +20,11 @@
             <p>GUIDE DESCRIPTION - may add this later</p>
         </div>
         <fieldset>
-            <legend><h4>Rate this guide</h4></legend>
+            <legend><h4>@lang('guides.rateTitle')</h4></legend>
             <div class="row">
                 <div class="col-md-3 text-center">
-                    <a style="color:white;" onclick="rate('{{ Route('guide.rate', ['id' => $guide->id]) }}', 'helpful', '{{ csrf_token() }}')" class="btn btn-primary"><span class="far fa-thumbs-up"></span> HELPFUL</a>
-                    <a style="color:white;" onclick="rate('{{ Route('guide.rate', ['id' => $guide->id]) }}', 'unhelpful', '{{ csrf_token() }}')" class="btn btn-danger"><span class="far fa-thumbs-down"></span> UNHELPFUL</a>
+                    <a style="color:white;" onclick="rate('{{ Route('guide.rate', ['id' => $guide->id]) }}', 'helpful', '{{ csrf_token() }}')" class="btn btn-primary"><span class="far fa-thumbs-up"></span> @lang('guides.helpfulLabel')</a>
+                    <a style="color:white;" onclick="rate('{{ Route('guide.rate', ['id' => $guide->id]) }}', 'unhelpful', '{{ csrf_token() }}')" class="btn btn-danger"><span class="far fa-thumbs-down"></span> @lang('guides.unhelpfulLabel')</a>
                 </div>
                 <div class="col-md-8">
                     @php
@@ -52,7 +52,18 @@
             <div class="row steps p-2 m-2 rounded">
                     <div class="col-md-2" style="vertical-align: middle; " ><p class="lead">@lang('guides.stepLabel') # {{ $step->stepNumber }}</p></div>
                     <div class="col-md-8"><p class="lead" style="font-size: 20px; text-align: justify; ">{{ $step->stepContent }}</p></div>
-                    <div class="col-md-2"><img class="img-thumbnail" src="https://via.placeholder.com/150" /></div>
+                    <div class="col-md-2">
+
+                        @if(sizeof($step->supplementaryContent) > 0)
+                            @if($step->supplementaryContent->pluck('dataType') == '1')
+                                video
+                            @else
+                                <img class="img-thumbnail" src="{{ stripslashes($step->supplementaryContent->pluck('contentLocation')[0]) }}" />
+                            @endif
+
+                        @endif
+
+                    </div>
             </div>
 
         @endforeach

@@ -6,11 +6,13 @@
  * Time: 15:14
  */
 return [
+    'title' => 'Guide',
     'addTitle' => 'Create a new guide',
     'generalTitle' => 'General',
     'stepsTitle' => 'Steps',
     'feedbackTitle' => 'Feedback',
     'informationTitle' => 'Information',
+    'rateTitle' => 'Rate this guide',
 
     'nameLabel' => 'Guide Name',
     'selectCategoryLabel' => 'Select a category',
@@ -20,6 +22,8 @@ return [
     'tagLabel' => 'Tags',
     'categoryLabel' => 'Category',
     'stepLabel' => 'Step',
+    'helpfulLabel' => 'HELPFUL',
+    'unhelpfulLabel' => 'UNHELPFUL',
 
     'addInformation' => 'Fill in the form below. Ensure that all fields marked with a red <span class="text-danger">*</span> are filled in before submitting.',
     'tooManyStepsInformation' => 'Added too many steps? Don\'t fill them in and they will automatically be removed on submission. 

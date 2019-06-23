@@ -22,7 +22,7 @@
             </p>
         </div>
 
-        {{ Form::open() }}
+        {{ Form::open(['files' => true]) }}
 
         <h2>@lang('guides.generalTitle')</h2>
         <hr>

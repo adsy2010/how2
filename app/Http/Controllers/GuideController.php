@@ -70,56 +70,51 @@ class GuideController extends Controller
         //run a foreach step or something
 
         $i = 1;
-        $stepContentCounter = 'stepContent' . $i;
 
-        foreach ($request->step['content'] as $key => $value)
-        {
+
+        foreach ($request->step['content'] as $key => $value) {
             $step = Steps::create([
-                'stepNumber' => $key+1,
+                'stepNumber' => $key + 1,
                 'stepContent' => $value,
                 'guide' => $guide->id
             ]);
+            $step->save();
+
         }
-        die();
-        /*while (!empty($request->$stepContentCounter))
+
+        if ($request->hasFile('step.supplementary'))
         {
-            $stepContentCounter = 'stepContent' . $i;
-            $supplementaryContent = 'supplementaryContent' . $i;
+            $files = $request->file('step.supplementary');
 
-            //Create the step
-            $step = Steps::create([
-                'stepNumber' => $i,
-                'stepContent' => $request->$stepContentCounter,
-                'guide' => $guide->id
-            ]);
-
-            //If file is attached, create supplementary content
-            if($request->hasFile($supplementaryContent)) // TODO: get the correct content and check it
+            foreach ($files as $key => $file)
             {
-                try{
-                    //storage /guide/content/guideID/Step
-                    $path = "guide/content/{$guide->id}/$i";
-                    $request->file($supplementaryContent)->store($path);
-                    $mime = $request->file($supplementaryContent)->getMimeType();
+                try {
+                    //storage /guide/content/guideID
+                    $stepnumber = $key + 1;
+                    $path = "/images/guide/content/{$guide->id}";
+                    $mime = $file->getMimeType();
                     $datatype = (substr($mime, 0, strlen('video')) === 'video') ? 1 : 0;
+                    $filename = $stepnumber .'.'. $file->getClientOriginalExtension();
+                    $file->storeAs($path, $filename);
+
+                    //Get the associated step so we can link its ID
+                    $stepId = Steps::where('guide', $guide->id)->where('stepNumber', $stepnumber)->first();
 
                     //run a foreach on each step creation adding uploaded content if required
                     SupplementaryContent::create([
-                        'step' => $step->id,
-                        'contentLocation' => $path,
+                        'step' => $stepId->id,
+                        'contentLocation' => $path .'/'. $filename,
                         'dataType' => $datatype
                     ]);
-                }
-                catch (Exception $exception)
-                {
+                    //technically the content location is not needed now as only 1 item per step can be recorded.
+
+                } catch (Exception $exception) {
                     //problem with supplementary content
+                    die($exception->getMessage());
                 }
-
             }
-            $i++;
-        }*/
 
-
+        }
 
         // Assuming we got this far, submit as an approval. Consider this as an optional step.
 
@@ -128,7 +123,7 @@ class GuideController extends Controller
             'guide' => $guide->id
         ]);*/
 
-        return redirect()->back(); //redirect on success or failure
+        //return redirect()->back(); //redirect on success or failure
 
     }
 
