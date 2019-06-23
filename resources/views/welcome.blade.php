@@ -1,99 +1,47 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
+@section('content')
+    <div class="container">
+        <div class="jumbotron">
+            <h4>Dashboard</h4>
+            <hr>
+            <p class="lead">Welcome to the HowTo Guide system. Feel free to browse the guides available and provide feedback
+                where you feel it is needed.
+            </p>
         </div>
-    </body>
-</html>
+        <h4>Latest Guides</h4>
+        <hr>
+        <div class="row p-2 m-2 rounded">
+            <div class="col-9 d-sm-none d-none d-md-block"><h4>Guide</h4></div>
+            <div class="col-1 d-sm-none d-none d-md-block"><h4>Steps</h4></div>
+            <div class="col-2 d-sm-none d-none d-md-block" align="center"><h4>Rating</h4></div>
+        </div>
+        @foreach($guides as $guide)
+
+            <div data-href="{{ Route('guide.view', ['id' => $guide->id]) }}" class="clickable-row list-guide-item row steps p-4 m-4 rounded">
+                <div class="col-md-9 col-sm-9 col-9">
+                    <p class="lead" style="font-size: 20px;">{{ $guide->name }}</p>
+                </div>
+                <div class="col-md-1 col-sm-3 col-3">
+                   {{ $guide->steps->count() }} {{ Str::plural('step', $guide->steps->count()) }}<br>
+                </div>
+                <div class="col-md-2 col-sm-12 col-12">
+                    @php
+                        $ratings = $guide->helpful + $guide->unhelpful;
+                        $helpful = ($ratings > 0 && $guide->helpful > 0)     ? round(($guide->helpful / $ratings) * 100) : 0;
+                        $unhelpful = ($ratings > 0 && $guide->unhelpful > 0) ? round(($guide->unhelpful / $ratings) * 100) : 0;
+                    @endphp
+                    <div class="progress m-2">
+                        <div id='helpfulbar' class="progress-bar bg-success" role="progressbar" style="width: {{ $helpful }}%" aria-valuenow="{{ $guide->helpful }}" aria-valuemin="0" aria-valuemax="{{ $ratings }}"></div>
+                        <div id='unhelpfulbar' class="progress-bar bg-danger" role="progressbar" style="width: {{ $unhelpful }}%" aria-valuenow="{{ $guide->unhelpful }}" aria-valuemin="0" aria-valuemax="{{ $ratings }}"></div>
+                    </div>
+                </div>
+                <div class="col-12"><p class="small">Published: {{ Carbon\Carbon::parse($guide->publishedTimestamp)->isoFormat('ll') }} at {{ Carbon\Carbon::parse($guide->publishedTimestamp)->isoFormat('LT') }}</p></div>
+            </div>
+
+        @endforeach
+
+        <a href="" class="form-control btn btn-primary">Load more...</a>
+
+    </div>
+@endsection

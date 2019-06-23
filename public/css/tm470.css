@@ -5,3 +5,6 @@ h1, h2, h3, h4 { font-family: 'Arvo', serif }
 
 .steps:nth-child(even) { background: #a4bacb; }
 .steps:nth-child(odd) { background: #c7e2f6; }
+
+.list-guide-item { color: #212529; text-decoration: none; transition: all 0.5s; }
+.list-guide-item:hover { color: #0000a8; text-decoration: none; }

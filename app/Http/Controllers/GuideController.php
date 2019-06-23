@@ -67,11 +67,6 @@ class GuideController extends Controller
 
         $guide->save();
 
-        //run a foreach step or something
-
-        $i = 1;
-
-
         foreach ($request->step['content'] as $key => $value) {
             $step = Steps::create([
                 'stepNumber' => $key + 1,
@@ -110,7 +105,7 @@ class GuideController extends Controller
 
                 } catch (Exception $exception) {
                     //problem with supplementary content
-                    die($exception->getMessage());
+                    return redirect()->to(Route('guide.view', ['id' => $guide->id]))->withErrors(__('guide.error-supplemntaryContentUpload'));
                 }
             }
 
@@ -118,12 +113,12 @@ class GuideController extends Controller
 
         // Assuming we got this far, submit as an approval. Consider this as an optional step.
 
-        /*Approval::create([
+        Approval::create([
             'user' => Auth::id(),
             'guide' => $guide->id
-        ]);*/
+        ]);
 
-        //return redirect()->back(); //redirect on success or failure
+        return redirect()->to(Route('guide.view', ['id' => $guide->id])); //redirect on success or failure
 
     }
 

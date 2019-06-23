@@ -33,5 +33,7 @@ return [
     'addStepBtn' => 'Add another step',
 
     'success-rating' => 'Thank you for your rating',
-    'success-feedback' => 'Thank you for your feedback'
+    'success-feedback' => 'Thank you for your feedback',
+
+    'error-supplementaryContentUpload' => 'Something went wrong during the upload of the supplementary content. Your guide was created anyway.',
 ];

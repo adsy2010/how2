@@ -18,14 +18,16 @@
         <tr>
             <th>#</th>
             <th>Guide</th>
+            <th>Steps</th>
             <th>Creator</th>
             <th>Actions</th>
         </tr>
-        @foreach([] as $guide)
+        @foreach($approvals as $approval)
         <tr>
-            <td>{{ $guide->id }}</td>
-            <td>{{ $guide->name }}</td>
-            <td>{{ $guide->publisher->pluck('name') }}</td>
+            <td>{{ $approval->id }}</td>
+            <td>{{ $approval->guideInfo->name }}</td>
+            <td>{{ $approval->guideInfo->steps->count() }}</td>
+            <td>{{ $approval->userInfo->name }}</td>
             <td>
                 <a href="" class="btn btn-primary"><span class="fas fa-eye"></span> View</a>
                 <a href="" class="btn btn-primary"><span class="fas fa-check"></span> Approve</a>
