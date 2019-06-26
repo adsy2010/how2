@@ -25,3 +25,19 @@ function rate(url, rating, csrf) {
         "_token": csrf
     });
 }
+
+function approve(url, approval, csrf)
+{
+    $.post(url, {
+        "approval": approval,
+        "_token": csrf
+    })
+}
+
+function reject(url, approval, csrf)
+{
+    $.post(url, {
+        "approval": approval,
+        "_token": csrf
+    })
+}

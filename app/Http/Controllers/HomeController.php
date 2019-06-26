@@ -29,6 +29,6 @@ class HomeController extends Controller
 
     public function welcome()
     {
-        return view('welcome', ['guides' => Guide::where('published', 1)->orderBy('publishedTimestamp', 'DESC')->get()]);
+        return view('welcome', ['guides' => Guide::where('published', 1)->orderBy('publishedTimestamp', 'DESC')->limit(6)->get()]);
     }
 }
