@@ -22,4 +22,4 @@
     {{ Form::close() }}
     </div>
 
-@endsection<?php
+@endsection

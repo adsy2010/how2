@@ -20,9 +20,9 @@ class CategoryController extends Controller
         return view('category.edit', ['categories' => Category::all()->pluck('name', 'id'), 'category' => $id]);
     }
 
-    public function showDelete()
+    public function showDelete(Request $request, Category $id)
     {
-        return view('category.delete');
+        return view('category.delete', ['category' => $id]);
     }
 
     public function create(Request $request)
@@ -84,8 +84,8 @@ class CategoryController extends Controller
 
         try{
             //TODO: Run this once checks are completed
-            //$id->delete();
-            return redirect()->to(Route('category.list'))
+            $id->delete();
+            return redirect()->to(Route('admin.category.list'))
                 ->with('success', __('category.success-deleted'))
                 ->send();
         }
@@ -107,6 +107,15 @@ class CategoryController extends Controller
     {
         $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->get() : $id->children;
         return view('category.list', ['categories' => $categories, 'category' => $id]);
+    }
+
+    /**
+     * Display categories within a category or top level
+     */
+    public function listAdminCategories(Request $request, Category $id = null)
+    {
+        $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->get() : $id->children;
+        return view('category.adminlist', ['categories' => $categories, 'category' => $id]);
     }
 
     /**

@@ -44,14 +44,18 @@ Route::post('/admin/permissions/add', 'Admin\UserGroupPermissionsController@addP
 
 Route::get('/admin/approvals', 'ApprovalController@listSubmissions')->name('admin.approvals.list');
 Route::get('/admin/approvals/{id}', 'ApprovalController@showSubmission')->name('admin.approvals.view');
+Route::post('/admin/approvals/{id}/approve', 'ApprovalController@approveSubmission')->name('admin.approvals.approve');
 Route::get('/admin/approvals/{id}/approve', 'ApprovalController@approveSubmission')->name('admin.approvals.approve');
+Route::post('/admin/approvals/{id}/reject', 'ApprovalController@declineSubmission')->name('admin.approvals.reject');
 Route::get('/admin/approvals/{id}/reject', 'ApprovalController@declineSubmission')->name('admin.approvals.reject');
 
 
 /** Categories */
-Route::get('/admin/categories')->name('admin.category.list');
+Route::get('/admin/categories', 'CategoryController@listAdminCategories')->name('admin.category.list');
 Route::get('/admin/categories/add', 'CategoryController@showCreate')->name('admin.category.add');
 Route::post('/admin/categories/add', 'CategoryController@create')->name('admin.category.postadd');
+
+Route::get('/admin/categories/{id}', 'CategoryController@listAdminCategories')->name('admin.category.list.children');
 Route::get('/admin/categories/{id}/edit', 'CategoryController@showUpdate')->name('admin.category.edit');
 Route::post('/admin/categories/{id}/edit', 'CategoryController@update')->name('admin.category.postedit');
 Route::get('/admin/categories/{id}/delete', 'CategoryController@showDelete')->name('admin.category.delete');

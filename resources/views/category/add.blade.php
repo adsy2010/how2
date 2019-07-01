@@ -7,7 +7,7 @@
             //separating the data from the template
             $breadcrumbs = [
                 ['title' => __('admin.dashboardtitle'), 'route' => 'admin.dashboard'],
-                ['title' => __('category.listTitle'), 'route' => 'category.list'],
+                ['title' => __('category.listTitle'), 'route' => 'admin.category.list'],
                 ['title' => __('category.addTitle'), 'route' => 'category.add']
             ];
         @endphp

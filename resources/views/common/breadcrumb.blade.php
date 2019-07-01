@@ -7,7 +7,10 @@
                 @if(++$i === sizeof($breadcrumbs))
                     <li class="breadcrumb-item active" aria-current="page">{{ $breadcrumb['title'] }}</li>
                 @else
-                    <li class="breadcrumb-item"><a href="{{ Route($breadcrumb['route']) }}">{{ $breadcrumb['title'] }}</a></li>
+                    @if(!isset($breadcrumb['routedata']))
+                        @php($breadcrumb['routedata'] = [])
+                    @endif
+                    <li class="breadcrumb-item"><a href="{{ Route($breadcrumb['route'], ['id' => $breadcrumb['routedata']]) }}">{{ $breadcrumb['title'] }}</a></li>
                 @endif
             @endforeach
         </ol>

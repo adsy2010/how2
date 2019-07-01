@@ -20,4 +20,6 @@ return [
     /** Buttons */
     'addBtn' => 'Add',
     'updateBtn' => 'Update',
+
+    'areYouSureDelete' => 'Are you sure you wish to delete this category?',
 ];
