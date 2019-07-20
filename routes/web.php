@@ -53,9 +53,10 @@ Route::prefix('admin')->group(function (){
         Route::get('{id}/reject', 'ApprovalController@declineSubmission')->name('admin.approvals.reject');
     });
     Route::prefix('categories')->group(function (){
-        Route::get('/')->name('admin.category.list');
+        Route::get('/', 'CategoryController@listAdminCategories')->name('admin.category.list');
         Route::get('add', 'CategoryController@showCreate')->name('admin.category.add');
         Route::post('add', 'CategoryController@create')->name('admin.category.postadd');
+        Route::get('{id}', 'CategoryController@listAdminCategories')->name('admin.category.list.children');
         Route::get('{id}/edit', 'CategoryController@showUpdate')->name('admin.category.edit');
         Route::post('{id}/edit', 'CategoryController@update')->name('admin.category.postedit');
         Route::get('{id}/delete', 'CategoryController@showDelete')->name('admin.category.delete');

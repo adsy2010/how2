@@ -36,11 +36,15 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+                    @auth
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link" href="{{ Route('guide.add') }}">Make submission</a></li>
+                        @if(auth()->user()->hasPermission('Create Submission'))
+                            <li class="nav-item"><a class="nav-link" href="{{ Route('guide.add') }}">Make submission</a></li>
+                        @endif
                         <li class="nav-item"><a class="nav-link" href="{{ Route('category.list') }}">Categories</a></li>
                         <li class="nav-item"><a class="nav-link" href="">My lists</a></li>
                     </ul>
+                    @endauth
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -62,6 +66,9 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('home') }}">My Dashboard</a>
+                                    @if(Auth::user()->hasPermission('Administrator'))
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                                    @endif
                                     <hr>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

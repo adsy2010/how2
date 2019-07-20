@@ -51,15 +51,16 @@
             @endforeach
 
         </table>
+        {{ $categories->links() }}
 
         <hr>
         @if(request('id'))
             <h4>Guides</h4>
         <div class="row">
-            @if(!(count($category->guides) > 0))
+            @if(!(count($catguides = $category->guides()->where('published', 1)->orderBy('publishedTimestamp', 'DESC')->get()) > 0))
                 There are no guides at this level
             @endif
-            @foreach($category->guides as $guide)
+            @foreach($catguides as $guide)
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div data-href="{{ Route('guide.view', ['id' => $guide->id]) }}" class="card clickable-row list-guide-item m-2 rounded" style="height: 240px;">
                         <div class="card-header bg-info">

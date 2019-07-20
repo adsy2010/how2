@@ -7,10 +7,15 @@
             //separating the data from the template
             $breadcrumbs = [
                 ['title' => __('admin.dashboardtitle'), 'route' => 'admin.dashboard'],
-                ['title' => __('category.listTitle'), 'route' => 'category.list'],
-                ['title' => __('category.updateTitle'), 'route' => 'category.edit']
-            ];
+                ['title' => __('category.listTitle'), 'route' => 'admin.category.list']
+                ];
+
+            if(isset($category->parentInfo)) $breadcrumbs[] = ['title' => $category->parentInfo->name, 'route' => 'admin.category.list.children','routedata' => $category->parentInfo->id];
+
+            if(!empty($category))
+                $breadcrumbs[] = ['title' => __('category.updateTitle'), 'route' => 'admin. category.edit']
         @endphp
+
         @include('common.errors')
         @include('common.success')
         @include('common.breadcrumb')

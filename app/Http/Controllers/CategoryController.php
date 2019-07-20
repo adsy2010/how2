@@ -61,13 +61,13 @@ class CategoryController extends Controller
             $id->name = $request->name;
             $id->parent = $request->parent;
             $id->save();
-            return redirect()->to(Route('admin.category.edit'))
+            return redirect()->to(Route('admin.category.edit', ['id' => $id->id]))
                 ->with('success', __('category.success-updated'))
                 ->send();
         }
         catch (Exception $exception)
         {
-            return redirect()->to(Route('admin.category.edit'))
+            return redirect()->to(Route('admin.category.edit', ['id' => $id->id]))
                 ->withInput($request->all())
                 ->withErrors(__('category.error-updated'))
                 ->send();
@@ -105,7 +105,7 @@ class CategoryController extends Controller
      */
     public function listCategories(Request $request, Category $id = null)
     {
-        $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->get() : $id->children;
+        $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->paginate(9) : $id->children()->paginate(9);
         return view('category.list', ['categories' => $categories, 'category' => $id]);
     }
 
@@ -114,7 +114,7 @@ class CategoryController extends Controller
      */
     public function listAdminCategories(Request $request, Category $id = null)
     {
-        $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->get() : $id->children;
+        $categories = (empty($id)) ? Category::where('parent', '<', 1)->orWhere('parent', null)->paginate(9) : $id->children()->paginate(9);
         return view('category.adminlist', ['categories' => $categories, 'category' => $id]);
     }
 

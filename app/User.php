@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,8 +58,11 @@ class User extends Authenticatable
         return (in_array($role, json_decode($this->usergroups->pluck('groupInfo')->pluck('name'), TRUE)));
     }
 
+    use Role;
+
     public function hasPermission($role)
     {
+        return $this->permissions($role);
         return (in_array($role, json_decode($this->usergroups->pluck('groupInfo')->pluck('permissions')->pluck('name'), TRUE)));
     }
 }
