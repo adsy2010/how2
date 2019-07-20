@@ -11,7 +11,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserGroupPermissions extends Model
+class RolePermissions extends Model
 {
 
     protected $table = 'permissions';
@@ -24,7 +24,7 @@ class UserGroupPermissions extends Model
 
     public function permissions()
     {
-        return $this->hasMany('App\UserGroupPermission', 'id', 'permissionID');
+        return $this->hasMany('App\RolePermission', 'id', 'permissionID');
     }
 
 }

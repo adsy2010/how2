@@ -16,12 +16,12 @@ class Feedback extends Model
     protected $table = 'feedback';
     protected $fillable = ['user', 'guide', 'comment'];
 
-    public function user()
+    public function userInfo()
     {
         return $this->hasOne('App\User', 'id', 'user');
     }
 
-    public function guide()
+    public function guideInfo()
     {
         return $this->hasOne('App\Guide', 'id', 'guide');
     }

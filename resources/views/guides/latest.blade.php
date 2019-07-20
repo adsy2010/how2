@@ -2,15 +2,9 @@
 
 @section('content')
     <div class="container">
-        <div class="jumbotron">
-            <h4>Dashboard</h4>
-            <hr>
-            <p class="lead">Welcome to the HowTo Guide system. Feel free to browse the guides available and provide feedback
-                where you feel it is needed. You can visit your personal dashboard by clicking on your name in the navigation bar and choosing "My Dashboard".
-            </p>
-        </div>
-        <h4>Latest Guides</h4>
+        <h4>Guides - {{ $viewname }}</h4>
         <hr>
+        <p class="lead">Guides are shown in order of newest published first.</p>
         <div class="row">
             @foreach($guides as $guide)
                 <div class="col-lg-4 col-md-6 col-sm-12">
@@ -36,10 +30,9 @@
 
 
             @endforeach
+            {{ $guides->links() }}
         </div>
 
-        <hr>
-        <a href="{{ Route('guides.latest') }}" class="form-control btn btn-primary">Load more...</a>
 
     </div>
 @endsection

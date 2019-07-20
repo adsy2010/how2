@@ -10,6 +10,8 @@
                 <li class="breadcrumb-item active" aria-current="page">@lang('admin.usergrouptitle') - {{ $group->name }}</li>
             </ol>
         </nav>
+        @include('common.errors')
+        @include('common.success')
         <h2>@lang('admin.usergrouptitle') - {{ $group->name }}</h2>
         <hr>
         {{ Form::open(['route' => ['admin.usergroups.update', 'id' => $group->id]]) }}

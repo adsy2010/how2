@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Permissions;
 use App\UserGroup;
-use App\UserGroupPermission;
-use App\UserGroupPermissions;
+use App\RolePermission;
+use App\RolePermissions;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 
@@ -17,20 +17,24 @@ class UserGroupPermissionsController extends Controller
 
     public function listPermissions()
     {
-        $permissions = UserGroupPermission::all();
+        $permissions = RolePermission::with('rolePermissions')->get();
         return view('admin.Permissions', ['permissions' => $permissions]);
     }
 
     /**
      * Add an existing permission to a group
      */
-    public function addPermissionToGroup(Request $request, UserGroup $id)
+    public function assignPermission(Request $request, UserGroup $id)
     {
         /** Needs updating with correct references */
-        UserGroupPermissions::create([
+        if(RolePermissions::create([
             'groupID' => $id->id,
-            'permissionID' => $request->permissionID
-        ]);
+            'permissionID' => $request->group
+        ]))
+            return redirect()->back()->with('success', 'The permission was associated with the group successfully.')->send();
+
+
+        return redirect()->back()->withErrors('The permission could not be associated with the group.')->send();
     }
 
     /**
@@ -38,13 +42,17 @@ class UserGroupPermissionsController extends Controller
      *
      * @param Request $request
      * @param UserGroup $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-    public function removePermissionFromGroup(Request $request, UserGroup $id)
+    public function unassignPermission(Request $request, UserGroup $id)
     {
         //setup some logic to confirm what your doing
-        $id->whereHas('permissions', function ($query, $request) {
-            $query->where('permissionID', $request->permissionID);
-        })->delete();
+        $d = RolePermissions::where('groupID', $id->id)->where('permissionID', $request->permissionID)->delete();
+        if($d)
+            return redirect()->to(Route('admin.usergroups.edit', ['id' => $id->id]))->with('success', 'Successfully removed permission from group.')->send();
+
+        return redirect()->to(Route('admin.usergroups.edit', ['id' => $id->id]))->withErrors('There was a problem removing the permission from the group.');
     }
 
 
@@ -62,7 +70,7 @@ class UserGroupPermissionsController extends Controller
         if($this->validate($request, [
             'name' => 'required|min:3|unique:permission'
         ])) {
-            UserGroupPermission::create([
+            RolePermission::create([
                 'name' => $request->name
             ]);
             return redirect()->to(Route('admin.permissions.list'))
@@ -82,7 +90,7 @@ class UserGroupPermissionsController extends Controller
      *
      * WARNING: This may cause instability throughout the application
      */
-    public function updatePermission(Request $request, UserGroupPermission $id)
+    public function updatePermission(Request $request, RolePermission $id)
     {
         // TODO: Check requirements then save and return to permissions list
         if(!$request->isMethod('post'))
@@ -116,7 +124,7 @@ class UserGroupPermissionsController extends Controller
      *
      * WARNING: This may cause instability throughout the application
      */
-    public function removePermission(Request $request, UserGroupPermission $id)
+    public function removePermission(Request $request, RolePermission $id)
     {
         if(!$request->isMethod('post'))
             return redirect()->to(Route('admin.permissions.list'))

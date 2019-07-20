@@ -10,15 +10,21 @@ use App\Feedback;
 use App\Guide;
 use App\Steps;
 use App\SupplementaryContent;
+use App\Traits\Role;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GuideController extends Controller
 {
+    use Role;
     public function showCreate()
     {
-        return view('guides.add', ['categories' => Category::orderBy('name', 'ASC')->get()->pluck('name', 'id')]);
+        if($this->permissions('Create Submission')){
+            return view('guides.add', ['categories' => Category::orderBy('name', 'ASC')->get()->pluck('name', 'id')]);
+        }
+        return redirect()->to(Route('home'))->withErrors('Unable to create a guide, you do not have permission!');
     }
 
     public function unpublish(Request $request, Guide $id)
@@ -161,27 +167,55 @@ class GuideController extends Controller
 
     public function feedback(Request $request, Guide $id)
     {
-        if(!$request->isMethod('post'))
-            return redirect()->to(Route('guide.view', ['id' => $id->id])) //TODO: Fill route name here
-            ->withErrors(__('admin.error-badmethod'))
-                ->send();
-
-        if($this->validate($request, [
-            'feedback' => 'required|min:5'
-        ]))
+        if(!$this->permissions('Feedback'))
         {
-            Feedback::create([
-                'user' => Auth::id(),
-                'guide' => $id->id,
-                'comment' => $request->feedback
-            ]);
+            if(!$request->isMethod('post'))
+                return redirect()->to(Route('guide.view', ['id' => $id->id])) //TODO: Fill route name here
+                ->withErrors(__('admin.error-badmethod'))
+                    ->send();
 
-            return redirect()->to(Route('guide.view', ['id' => $id->id]))
-                ->with('success', __('guides.success-feedback'))
-                ->send();
+            if($validation = $this->validate($request, [
+                'feedback' => 'required|min:5'
+            ]))
+            {
+                Feedback::create([
+                    'user' => Auth::id(),
+                    'guide' => $id->id,
+                    'comment' => $request->feedback
+                ]);
+
+                return redirect()->to(Route('guide.view', ['id' => $id->id]))
+                    ->with('success', __('guides.success-feedback'))
+                    ->send();
+            }
+            return redirect()->to(Route('guide.view', ['id' => $id->id]))->withErrors($validation);//TODO: return errors
         }
+        return redirect()->to(Route('guide.view', ['id' => $id->id]))
+            ->withErrors('You do not have permission to provide feedback.');
 
-        return;//TODO: return errors
 
+
+    }
+
+    /**
+     * Show the latest guides added to the system
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function latest()
+    {
+        return view('guides.latest', ['viewname' => 'Latest', 'guides' => Guide::where('published', 1)->orderBy('publishedTimestamp', 'DESC')->paginate(9)]);
+    }
+
+    /**
+     * Show the latest guides added to the system by a specific user
+     *
+     * @param Request $request
+     * @param User $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function user(Request $request, User $id)
+    {
+        return view('guides.latest', ['viewname' => $id->name, 'guides' => Guide::where('published', 1)->where('publisher', $id->id)->orderBy('publishedTimestamp', 'DESC')->paginate(9)]);
     }
 }

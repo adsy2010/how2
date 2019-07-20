@@ -15,66 +15,81 @@ Route::get('/', 'HomeController@welcome')->name('root');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
+Route::prefix('home')->group(function(){
+    Route::get('/', 'HomeController@dashboard')->name('home');
+    Route::get('feedback', 'HomeController@feedback')->name('user.feedback');
+    Route::get('submissions', 'HomeController@submissions')->name('user.submissions');
+});
+Route::prefix('admin')->group(function (){
+    Route::get('/', 'Admin\AdminController@dashboard')->name('admin.dashboard');
+    Route::prefix('users')->group(function (){
+        Route::get('/', 'Admin\UserController@listUsers')->name('admin.users.list');
+        Route::get('{id}', 'Admin\UserController@showuser')->name('admin.users.view');
+        //Route::get('{id}/usergroups', function (){ return; })->name('admin.usersgroups.list');
+        Route::post('{id}/assigngroup', 'Admin\UserController@addMemberToGroup')->name('admin.usersgroups.assign');
+        Route::post('{id}/unassigngroup', 'Admin\UserController@removeMemberFromGroup')->name('admin.usersgroups.unassign');
+    });
+    Route::prefix('usergroups')->group(function (){
+        /** Manage user groups */
+        Route::get('/', 'Admin\UserGroupController@listGroups')->name('admin.usergroups.list');
+        Route::post('add', 'Admin\UserGroupController@createGroup')->name('admin.usergroups.add');
+        Route::get('{id}/edit', 'Admin\UserGroupController@showGroup')->name('admin.usergroups.edit');
+        Route::post('{id}/edit', 'Admin\UserGroupController@updateGroup')->name('admin.usergroups.update');
+        Route::get('{id}/delete', 'Admin\UserGroupController@deleteGroup')->name('admin.usergroups.delete');
+        Route::post('{id}/delete', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.deleteconfirm');
+        Route::post('{id}/assignpermission', 'Admin\UserGroupPermissionsController@assignPermission')->name('admin.usergroups.permission.assign');
+        Route::post('{id}/removepermission', 'Admin\UserGroupPermissionsController@unassignPermission')->name('admin.usergroups.permission.unassign');
+    });
+    Route::prefix('permissions')->group(function () {
+        /** Manage permissions */
+        Route::get('/', 'Admin\UserGroupPermissionsController@listPermissions')->name('admin.permissions.list');
+        Route::get('{id}', 'Admin\UserGroupPermissionsController@showPermissions')->name('admin.permissions.view');
+        Route::post('add', 'Admin\UserGroupPermissionsController@addPermission')->name('admin.permissions.add');
+    });
+    Route::prefix('approvals')->group(function (){
+        Route::get('/', 'ApprovalController@listSubmissions')->name('admin.approvals.list');
+        Route::get('{id}', 'ApprovalController@showSubmission')->name('admin.approvals.view');
+        Route::get('{id}/approve', 'ApprovalController@approveSubmission')->name('admin.approvals.approve');
+        Route::get('{id}/reject', 'ApprovalController@declineSubmission')->name('admin.approvals.reject');
+    });
+    Route::prefix('categories')->group(function (){
+        Route::get('/')->name('admin.category.list');
+        Route::get('add', 'CategoryController@showCreate')->name('admin.category.add');
+        Route::post('add', 'CategoryController@create')->name('admin.category.postadd');
+        Route::get('{id}/edit', 'CategoryController@showUpdate')->name('admin.category.edit');
+        Route::post('{id}/edit', 'CategoryController@update')->name('admin.category.postedit');
+        Route::get('{id}/delete', 'CategoryController@showDelete')->name('admin.category.delete');
+        Route::post('{id}/delete', 'CategoryController@remove')->name('admin.category.postdelete');
+    });
+});
 //TODO: Adjust the route types from GET to the relevant type
 
-Route::get('/admin/', 'Admin\AdminController@dashboard')->name('admin.dashboard');
-Route::get('/admin/users', 'Admin\UserController@listUsers')->name('admin.users.list');
-Route::get('/admin/users/{id}', 'Admin\UserController@showuser')->name('admin.users.view');
-//Route::get('/admin/users/{id}/usergroups', function (){ return; })->name('admin.usersgroups.list');
-Route::post('/admin/users/{id}/assigngroup', 'Admin\UserController@addMemberToGroup')->name('admin.usersgroups.assign');
-Route::post('/admin/users/{id}/unassigngroup', 'Admin\UserController@removeMemberFromGroup')->name('admin.usersgroups.unassign');
-
-/** Manage user groups */
-Route::get('/admin/usergroups', 'Admin\UserGroupController@listGroups')->name('admin.usergroups.list');
-Route::post('/admin/usergroups/add', 'Admin\UserGroupController@createGroup')->name('admin.usergroups.add');
-Route::get('/admin/usergroups/{id}/edit', 'Admin\UserGroupController@showGroup')->name('admin.usergroups.edit');
-Route::post('/admin/usergroups/{id}/edit', 'Admin\UserGroupController@updateGroup')->name('admin.usergroups.update');
-Route::get('/admin/usergroups/{id}/delete', 'Admin\UserGroupController@deleteGroup')->name('admin.usergroups.delete');
-Route::post('/admin/usergroups/{id}/delete', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.deleteconfirm');
-
-Route::get('/admin/usergroups/{id}/assignpermission', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.permission.assign');
-Route::get('/admin/usergroups/{id}/removepermission', 'Admin\UserGroupController@deleteGroupConfirm')->name('admin.usergroups.permission.unassign');
-
-/** Manage permissions */
-Route::get('/admin/permissions', 'Admin\UserGroupPermissionsController@listPermissions')->name('admin.permissions.list');
-Route::get('/admin/permissions/{id}', 'Admin\UserGroupPermissionsController@showPermissions')->name('admin.permissions.view');
-Route::post('/admin/permissions/add', 'Admin\UserGroupPermissionsController@addPermission')->name('admin.permissions.add');
-
-Route::get('/admin/approvals', 'ApprovalController@listSubmissions')->name('admin.approvals.list');
-Route::get('/admin/approvals/{id}', 'ApprovalController@showSubmission')->name('admin.approvals.view');
-Route::get('/admin/approvals/{id}/approve', 'ApprovalController@approveSubmission')->name('admin.approvals.approve');
-Route::get('/admin/approvals/{id}/reject', 'ApprovalController@declineSubmission')->name('admin.approvals.reject');
-
-
-/** Categories */
-Route::get('/admin/categories')->name('admin.category.list');
-Route::get('/admin/categories/add', 'CategoryController@showCreate')->name('admin.category.add');
-Route::post('/admin/categories/add', 'CategoryController@create')->name('admin.category.postadd');
-Route::get('/admin/categories/{id}/edit', 'CategoryController@showUpdate')->name('admin.category.edit');
-Route::post('/admin/categories/{id}/edit', 'CategoryController@update')->name('admin.category.postedit');
-Route::get('/admin/categories/{id}/delete', 'CategoryController@showDelete')->name('admin.category.delete');
-Route::post('/admin/categories/{id}/delete', 'CategoryController@remove')->name('admin.category.postdelete');
-
-Route::get('/categories', 'CategoryController@listCategories')->name('category.list');
-Route::get('/categories/{id}', 'CategoryController@listCategories')->name('category.list.children');
-Route::get('/categories/tree', 'CategoryController@listCategoryTree')->name('category.tree');
+Route::prefix('categories')->group(function (){
+    /** Categories */
+    Route::get('/', 'CategoryController@listCategories')->name('category.list');
+    Route::get('{id}', 'CategoryController@listCategories')->name('category.list.children');
+    Route::get('tree', 'CategoryController@listCategoryTree')->name('category.tree');
 //Route::get('/categories/{id}', 'CategoryController@listGuidesInCategory')->name('category.view');
-
-
-
-Route::get('/guide/new', 'GuideController@showCreate')->name('guide.add')->middleware('auth');
-Route::post('/guide/new', 'GuideController@submit')->name('guide.submit');
-Route::get('/guide/{id}', 'GuideController@show')->name('guide.view');
-Route::get('/guide/{id}/feedback', 'GuideController@feedback')->name('guide.feedback');
-Route::post('/guide/{id}/rate', 'GuideController@rate')->name('guide.rate');
-
-
-Route::get('/guidelist/')->name('guidelist.list');
-Route::get('/guidelist/add')->name('guidelist.add');
-Route::get('/guidelist/{id}')->name('guidelist.view');
-Route::get('/guidelist/{id}/update')->name('guidelist.update');
-Route::get('/guidelist/{id}/delete')->name('guidelist.delete');
+});
+Route::prefix('guide')->group(function (){
+    Route::get('new', 'GuideController@showCreate')->name('guide.add')->middleware('auth');
+    Route::post('new', 'GuideController@submit')->name('guide.submit');
+    Route::get('{id}', 'GuideController@show')->name('guide.view');
+    Route::post('{id}/feedback', 'GuideController@feedback')->name('guide.feedback');
+    Route::post('{id}/rate', 'GuideController@rate')->name('guide.rate');
+});
+Route::prefix('guides')->group(function ()
+{
+    Route::get('latest', 'GuideController@latest')->name('guides.latest');
+    Route::get('user/{id}', 'GuideController@user')->name('guides.user');
+});
+Route::prefix('guidelist')->group(function () {
+    Route::get('/')->name('guidelist.list');
+    Route::get('add')->name('guidelist.add');
+    Route::get('{id}')->name('guidelist.view');
+    Route::get('{id}/update')->name('guidelist.update');
+    Route::get('{id}/delete')->name('guidelist.delete');
+});
 
 Route::get('/search')->name('search.view');
+Route::get('/test', 'HomeController@test');

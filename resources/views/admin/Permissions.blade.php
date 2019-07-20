@@ -9,6 +9,8 @@
                 <li class="breadcrumb-item active" aria-current="page">@lang('admin.permissionlisttitle')</li>
             </ol>
         </nav>
+        @include('common.errors')
+        @include('common.success')
         <h2>@lang('admin.permissionlisttitle')</h2>
         <hr>
         {{ Form::open(['route' => ['admin.permissions.add']]) }}
@@ -33,7 +35,15 @@
                 <tr>
                     <td>{{ $permission->id }}</td>
                     <td>{{ $permission->name }}</td>
-                    <td>{{ $permission->groupPermissions }}</td>
+                    <td>
+
+                        @foreach($permission->rolepermissions->pluck('usergroups') as $p)
+                            <a href="{{ Route('admin.usergroups.edit', ['id' => $p->pluck('id')->first()]) }}">
+                                <div class="badge badge-pill badge-secondary p-2" style="font-weight: normal; font-size:14px;">{{ $p->pluck('name')->first() }}</div>
+                            </a>
+                        @endforeach
+
+                    </td>
                 </tr>
             @endforeach
         </table>

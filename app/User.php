@@ -51,4 +51,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Guide', 'publisher', 'id');
     }
+
+    public function hasRole($role)
+    {
+        return (in_array($role, json_decode($this->usergroups->pluck('groupInfo')->pluck('name'), TRUE)));
+    }
+
+    public function hasPermission($role)
+    {
+        return (in_array($role, json_decode($this->usergroups->pluck('groupInfo')->pluck('permissions')->pluck('name'), TRUE)));
+    }
 }

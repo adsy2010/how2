@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\UserGroup;
 use App\UserGroupMember;
-use App\UserGroupPermission;
+use App\RolePermission;
 use Illuminate\Http\Request;
 
 class UserGroupController extends Controller
@@ -28,7 +28,7 @@ class UserGroupController extends Controller
      */
     public function showGroup(Request $request, UserGroup $id)
     {
-        $permissions = UserGroupPermission::whereNotIn('id', $id->permissions->pluck('permissionID'))->orderBy('name', 'ASC')->pluck('name', 'id');
+        $permissions = RolePermission::whereNotIn('id', $id->permissions->pluck('permissionID'))->orderBy('name', 'ASC')->pluck('name', 'id');
         return view('admin.UserGroup', ['group' => $id, 'permissions' => $permissions]);
     }
 
