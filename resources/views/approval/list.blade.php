@@ -29,9 +29,9 @@
             <td>{{ $approval->guideInfo->steps->count() }}</td>
             <td>{{ $approval->userInfo->name }}</td>
             <td>
-                <a href="" class="btn btn-primary"><span class="fas fa-eye"></span> View</a>
-                <a href="" class="btn btn-primary"><span class="fas fa-check"></span> Approve</a>
-                <a href="" class="btn btn-primary"><span class="fas fa-times"></span> Reject</a>
+                <a href="{{ Route('admin.approvals.view', ['id' => $approval->id]) }}" class="btn btn-primary"><span class="fas fa-eye"></span> View</a>
+                <a href="{{ Route('admin.approvals.approve', ['id' => $approval->id]) }}" class="btn btn-primary"><span class="fas fa-check"></span> Approve</a>
+                <a href="{{ Route('admin.approvals.reject', ['id' => $approval->id]) }}" class="btn btn-primary"><span class="fas fa-times"></span> Reject</a>
             </td>
         </tr>
         @endforeach

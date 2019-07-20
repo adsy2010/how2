@@ -17,7 +17,7 @@
     @lang('approvals.areYouSureApprove')
         {{ Form::open() }}
         {{ Form::submit('Confirm', ['class' => 'btn btn-success']) }}
-        <a href="" class="btn btn-primary">No, take me back!</a>
+        <a href="{{ url()->previous() }}" class="btn btn-primary">No, take me back!</a>
         {{ Form::close() }}
     </div>
 

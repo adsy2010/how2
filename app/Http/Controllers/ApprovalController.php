@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
-class ApprovalController
+class ApprovalController extends Controller
 {
     /**
      * Approval page and confirmation
@@ -40,7 +40,9 @@ class ApprovalController
             }
             //TODO: Log transaction
 
-            return; //redirect success
+            return redirect()->to(Route('admin.approvals.list'))
+                ->with('success', 'Guide approved')
+                ->send();
         }
 
         //show the view for the guide to be approved
@@ -73,7 +75,9 @@ class ApprovalController
             }
             //TODO: Log transaction
 
-            return; //redirect success
+            return redirect()->to(Route('admin.approvals.list'))
+                    ->with('success', 'Declined guide')
+                    ->send();
         }
 
         //show the view for the guide to be rejected
