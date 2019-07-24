@@ -16,9 +16,19 @@ class GuideList extends Model
     protected $table = 'guidelist';
     protected $fillable = ['name', 'user'];
 
-    public function user()
+    public function userInfo()
     {
         return $this->hasOne('App\User', 'id', 'user');
+    }
+
+    public function sharedGuideLists()
+    {
+        return $this->hasMany('App\SharedGuideList', 'guidelist', 'id');
+    }
+
+    public function guidelistItems()
+    {
+        return $this->hasMany('App\GuideListItem', 'guidelist', 'id');
     }
 
     //TODO: Add another table and model to contain the guides within a list and their relative positions

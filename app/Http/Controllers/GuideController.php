@@ -63,6 +63,7 @@ class GuideController extends Controller
 
         $guide = Guide::create([
             'name' => $request->name,
+            'description' => $request->description,
             'publisher' => Auth::id(),
             'category' => $request->category,
             'draft' => 1,

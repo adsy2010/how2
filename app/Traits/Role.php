@@ -9,26 +9,33 @@
 namespace App\Traits;
 
 use App\RolePermission;
-use App\User;
 use Illuminate\Support\Facades\Auth;
-use function MongoDB\BSON\toJSON;
 
 /**
- * This is designed to check a users groups permissions
+ * This is designed to check the current users groups and their permissions
  *
  * Trait Role
  * @package App\Traits
  */
 trait Role
 {
-    /** check membership */
+    /**
+     * Check current user's group memberships
+     *
+     * @param string The group to check for membership of
+     * @return bool True if a role membership is found, false otherwise
+     */
     protected function check($membership)
     {
-        //return (Auth::user()->usergroups->pluck('groupInfo')->pluck('name');
         return (Auth::user()->hasRole($membership));
     }
 
-    /** Check membership roles */
+    /**
+     * Checks for membership role permissions for the current user
+     *
+     * @param string The permission to check for
+     * @return bool true if a permission is found, false otherwise
+     */
     protected function permissions($permission)
     {
         $permissions = RolePermission::distinct()
@@ -49,23 +56,5 @@ trait Role
 
 
         return (count($permissions) > 0) ? true : false;
-
-        /*
-        $collection = array();
-        foreach ($permissions->usergroups as $a)
-        {
-            foreach ($a->groupInfo->permissions as $b)
-            {
-                $collection[] = $b['permissions'][0];
-            }
-        }
-        echo json_encode($collection, JSON_PRETTY_PRINT);
-        echo $collection[1]['name'];
-        return (in_array('Administrator', $collection))? 'true': 'false';
-//        return (in_array('Administrator', $collection))? 'true': 'false';
-        return;// implode('<br>',$collection);
-
-        return $permissions;
-        */
     }
 }

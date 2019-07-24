@@ -6,7 +6,7 @@
     @php
         //separating the data from the template
         $breadcrumbs = [
-            ['title' => __('generic.home'), 'route' => 'root'],
+            ['title' => 'My Dashboard', 'route' => 'home'],
             ['title' => 'My Feedback', 'route' => '']
         ];
     @endphp
@@ -16,32 +16,33 @@
 
 
         <h4>Feedback received</h4>
-        <table class="table table-striped">
+        <table class="table table-hover">
             <tr>
                 <th>Guide</th>
                 <th>Message</th>
                 <th>Posted at</th>
             </tr>
             @foreach($received->pluck('feedback') as $f)
-                <tr>
+                <tr class="clickable-row" data-href="{{Route('guide.view', ['id' => $f->pluck('guideInfo')->pluck('id')->first()])}}">
                     <td>{{ $f->pluck('guideInfo')->pluck('name')->first() }}</td>
                     <td>{{ $f->pluck('comment')->first() }}</td>
                     <td>{{ $f->pluck('created_at')->first() }}</td>
                 </tr>
             @endforeach
 
-        </table>
+
+        </table>{{ $received }}
         {{ $received->links() }}
         <hr>
         <h4>Feedback given</h4>
-        <table class="table table-striped">
+        <table class="table table-hover">
             <tr>
                 <th>Guide</th>
                 <th>Message</th>
                 <th>Posted at</th>
             </tr>
             @foreach($feedback as $f)
-                <tr>
+                <tr class="clickable-row" data-href="{{ Route('guide.view', ['id' => $f->guideInfo->id]) }}">
                     <td>{{ $f->guideInfo->name }}</td>
                     <td>{{ $f->comment }}</td>
                     <td>{{ $f->created_at }}</td>

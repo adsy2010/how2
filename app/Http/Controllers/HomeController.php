@@ -39,10 +39,11 @@ class HomeController extends Controller
 
     public function feedback()
     {
-        $feedbackgiven = Feedback::where('user', Auth::id())->paginate(5);
+        $feedbackgiven = Feedback::where('user', Auth::id())->orderBy('created_at', 'DESC')->paginate(5);
+        $feedbackreceived2 = "";
         $feedbackreceived = Guide::has('feedback')->where('publisher', Auth::id())->paginate(5);
 
-        return view('user.feedback', ['feedback' => $feedbackgiven, 'received' => $feedbackreceived]);
+        return view('user.feedback', ['feedback' => $feedbackgiven, 'received' => $feedbackreceived, 'received2' => $feedbackreceived2]);
     }
 
     public function welcome()
@@ -51,9 +52,4 @@ class HomeController extends Controller
     }
 
     use Role;
-    public function test()
-    {
-        return ($this->permissions('Administrator')) ? "true" : "false";//('Administrators')) ? "true" : "false";
-        //return ($this->check('Administrators')) ? "true" : "false";
-    }
 }

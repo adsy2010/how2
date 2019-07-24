@@ -27,6 +27,7 @@ return [
 
     /** Success messages */
     'success-addedgroup' => 'Successfully added new group to the database.',
+    'success-addedgroupmembership' => 'Successfully added user to group within the database.',
     'success-addedpermission' => 'Successfully added new permission to the database.',
     'success-deletedmembergroup' => 'Successfully removed group from the selected user.',
 

@@ -9,6 +9,7 @@ use App\UserGroup;
 use App\UserGroupMember;
 use App\RolePermission;
 use Illuminate\Http\Request;
+use Exception;
 
 class UserGroupController extends Controller
 {
@@ -114,11 +115,21 @@ class UserGroupController extends Controller
      *
      * @param Request $request
      * @param UserGroup $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function deleteGroupConfirm(Request $request, UserGroup $id)
     {
-        //$id->delete();
-        return;
+        try{
+            $cleargroup = $id->id;
+            $id->delete();
+            UserGroupMember::where('groupID', $cleargroup)->delete();
+            return redirect()->to(Route('admin.usergroups.list'))->with('success', 'Successfully removed group from the database');
+        }
+        catch (Exception $exception)
+        {
+            return redirect()->to(Route('admin.usergroups.list'))->withErrors($exception->getMessage());
+        }
+
     }
 
 

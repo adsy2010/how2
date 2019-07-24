@@ -30,6 +30,7 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Groups</th>
+                <th>Actions</th>
             </tr>
             @foreach($permissions as $permission)
                 <tr>
@@ -43,6 +44,9 @@
                             </a>
                         @endforeach
 
+                    </td>
+                    <td>
+                        <a class="btn btn-danger disabled" href=""><span class="fas fa-trash"></span></a>
                     </td>
                 </tr>
             @endforeach

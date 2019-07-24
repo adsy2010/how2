@@ -86,7 +86,7 @@ class UserController extends Controller
             ]);
 
             return redirect()->to(Route('admin.users.view', ['id' => $id->id]))
-                ->with('success', __('admin.success-addedgroup'))
+                ->with('success', __('admin.success-addedgroupmembership'))
                 ->send();
         }
 

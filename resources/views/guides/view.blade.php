@@ -17,7 +17,7 @@
 
         <div class="jumbotron">
             <h1>{{ $guide->name }}</h1>
-            <p>GUIDE DESCRIPTION - may add this later</p>
+            <p>{{ $guide->description }}</p>
         </div>
         <fieldset>
             <legend><h4>@lang('guides.rateTitle')</h4></legend>
@@ -74,6 +74,19 @@
         {{ Form::textarea('feedback', null, ['rows' => 2,'class' => 'form-control']) }}
         {{ Form::submit('Send feedback to author', ['class' => 'btn btn-primary']) }}
         {{ Form::close() }}
+
+        @php($myFeedback = auth()->user()->feedback->where('guide', $guide->id))
+
+        @if($myFeedback->count() > 0)
+            <hr>
+            <h4>My feedback for this guide</h4>
+            @foreach($myFeedback as $feedback)
+                <div class="row container" style="border-bottom: #aeaeae 0.5px solid;">
+                    <div class="col-md-3">{{ $feedback->created_at }}</div>
+                    <div class="col-md-9">{{ $feedback->comment }}</div>
+                </div>
+            @endforeach
+        @endif
 
     </div>
 @endsection

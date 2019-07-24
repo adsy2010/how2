@@ -34,6 +34,12 @@
             <hr>
 
             <div class="row">
+                <div class="col-md-2">{{ Form::label('description', __('guides.descriptionLabel')) }}</div>
+                <div class="col-md-10">{{ Form::textarea('description', null, ['class' => 'form-control', 'placeholder' => 'Enter a guide description. This field is not required but is useful for some guides.']) }}</div>
+            </div>
+            <hr>
+
+            <div class="row">
                 <div class="col-md-2">{{ Form::label('category', __('guides.selectCategoryLabel')) }} @lang('generic.required')</div>
                 <div class="col-md-10">{{ Form::select('category', $categories, null, ['class' => 'form-control']) }}</div>
             </div>

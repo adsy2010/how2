@@ -17,6 +17,7 @@ return [
     'nameLabel' => 'Guide Name',
     'selectCategoryLabel' => 'Select a category',
     'contentLabel' => 'Content',
+    'descriptionLabel' => 'Description',
     'restrictLabel' => 'Restrict to group',
     'supplementaryLabel' => 'Supplementary',
     'tagLabel' => 'Tags',

@@ -49,7 +49,7 @@ class Guide extends Model
 
     public function feedback()
     {
-        return $this->hasMany('App\Feedback', 'guide', 'id');
+        return $this->hasMany('App\Feedback', 'guide', 'id')->orderBy('created_at', 'DESC');
     }
 
     public function guidelists()

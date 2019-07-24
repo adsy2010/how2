@@ -13,6 +13,8 @@
         <div class="col-md-4 col-sm-6" style="margin-bottom: 5px;"><a href="{{ Route('user.submissions') }}" class="btn btn-primary btn-dashboard">My submissions</a></div>
         <div class="col-md-4 col-sm-6" style="margin-bottom: 5px;"><a href="{{ Route('user.feedback') }}" class="btn btn-primary btn-dashboard">My feedback</a></div>
         <div class="col-md-4 col-sm-6" style="margin-bottom: 5px;"><a href="{{ Route('guides.user', ['id'=> Auth::id()]) }}" class="btn btn-primary btn-dashboard">My Latest Guides</a></div>
+        <div class="col-md-4 col-sm-6" style="margin-bottom: 5px;"><a href="" class="btn btn-primary btn-dashboard">My Guide Lists</a></div>
+        <div class="col-md-4 col-sm-6" style="margin-bottom: 5px;"><a href="" class="btn btn-primary btn-dashboard">Shared Guide Lists</a></div>
     </div>
 </div>
 @endsection

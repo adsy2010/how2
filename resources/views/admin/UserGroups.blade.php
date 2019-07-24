@@ -32,6 +32,7 @@
                 <th>#</th>
                 <th>@lang('generic.name')</th>
                 <th>@lang('generic.created')</th>
+                <th width="200">@lang('generic.actions')</th>
             </tr>
 
             @foreach ($groups as $group)
@@ -39,6 +40,7 @@
                     <td>{{ $group->id }}</td>
                     <td>{{ $group->name }}</td>
                     <td>{{ $group->created_at }}</td>
+                    <td><a class="btn btn-danger" href="{{ Route('admin.usergroups.delete', ['id' => $group->id]) }}"><span class="fas fa-trash"></span></a></td>
                 </tr>
 
             @endforeach

@@ -41,9 +41,9 @@
         <h4>Assigned Permissions</h4>
         <table class="table table-hover">
             <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Options</th>
+                <th width="60">#</th>
+                <th>@lang('generic.name')</th>
+                <th width="200">@lang('generic.actions')</th>
             </tr>
 
             @foreach($group->permissions->pluck('permissions') as $permission)
@@ -53,7 +53,7 @@
                     <td>
                         {{ Form::open(['route' => ['admin.usergroups.permission.unassign', 'id' => $group->id]]  ) }}
                         {{ Form::hidden('permissionID', $permission->first()->id) }}
-                        {{ Form::button('<span class="fas fa-trash"></span> Remove from group', ['type' => 'submit','class' => 'btn btn-danger']) }}
+                        {{ Form::button('<span class="fas fa-trash"></span> Remove from group', ['type' => 'submit','class' => 'btn btn-sm btn-danger']) }}
                         {{ Form::close() }}
                     </td>
                 </tr>
@@ -67,9 +67,9 @@
         <h4>Group members</h4>
         <table class="table table-hover">
             <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Options</th>
+                <th width="60">#</th>
+                <th>@lang('generic.name')</th>
+                <th width="200">@lang('generic.actions')</th>
             </tr>
             @foreach($group->members->pluck('user') as $user)
                 <tr>
@@ -78,7 +78,7 @@
                     <td>
                         {{ Form::open(['route' => ['admin.usersgroups.unassign', 'id' => $user->id]]  ) }}
                         {{ Form::hidden('groupID', $group->id) }}
-                        {{ Form::button('<span class="fas fa-trash"></span> Remove from group', ['type' => 'submit','class' => 'btn btn-danger']) }}
+                        {{ Form::button('<span class="fas fa-trash"></span> Remove from group', ['type' => 'submit','class' => 'btn btn-sm btn-danger']) }}
                         {{ Form::close() }}
                     </td>
                 </tr>

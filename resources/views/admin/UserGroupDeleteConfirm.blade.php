@@ -14,8 +14,10 @@
         <hr>
         <fieldset class="border p-4 rounded">
             <legend class="border w-auto p-2">Are you sure you want to delete this group and all its memberships?</legend>
-            <a href="" class="btn btn-danger">Yes, I really am sure!</a>
-            <a href="{{ Route('admin.usergroups.edit', ['id' => $group->id]) }}" class="btn btn-primary">No, get me out of here!</a>
+            {{ Form::open(['route' => ['admin.usergroups.deleteconfirm', 'id' => $group->id]]) }}
+            <input type="submit" class="btn btn-danger" value="Yes, I really am sure!">
+
+            <a href="{{ Route('admin.usergroups.edit', ['id' => $group->id]) }}" class="btn btn-primary">No, get me out of here!</a>{{ Form::close() }}
         </fieldset>
 
 

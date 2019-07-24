@@ -45,6 +45,8 @@ Route::prefix('admin')->group(function (){
         Route::get('/', 'Admin\UserGroupPermissionsController@listPermissions')->name('admin.permissions.list');
         Route::get('{id}', 'Admin\UserGroupPermissionsController@showPermissions')->name('admin.permissions.view');
         Route::post('add', 'Admin\UserGroupPermissionsController@addPermission')->name('admin.permissions.add');
+        //Route::get('delete', 'Admin\UserGroupPermissionsController@removePermission')->name('admin.permissions.delete');
+        //Route::post('delete', 'Admin\UserGroupPermissionsController@removePermission')->name('admin.permissions.deleteconfirm');
     });
     Route::prefix('approvals')->group(function (){
         Route::get('/', 'ApprovalController@listSubmissions')->name('admin.approvals.list');

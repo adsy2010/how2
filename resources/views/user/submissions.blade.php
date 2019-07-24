@@ -43,7 +43,7 @@
                 <th width="200">Actions</th>
             </tr>
             @foreach($published as $submission)
-                <tr>
+                <tr class="clickable-row" data-href="{{ Route('guide.view', ['id' => $submission->id]) }}">
                     <td>{{ $submission->id }}</td>
                     <td>{{ $submission->name }}</td>
                     <td>{{ $submission->tags }}</td>
