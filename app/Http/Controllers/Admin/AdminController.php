@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Traits\Logging;
 use App\Traits\Role;
 
 class AdminController extends Controller
@@ -28,5 +29,11 @@ class AdminController extends Controller
             return view('admin.dashboard');
         }
         return redirect()->to(Route('home'))->withErrors('You do not have the Administrator privilege.');
+    }
+
+    use Logging;
+    public function logs()
+    {
+        return view('admin.logs', ['logs' => $this->retrieveLogs()]);
     }
 }

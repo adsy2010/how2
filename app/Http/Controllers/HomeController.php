@@ -52,4 +52,10 @@ class HomeController extends Controller
     }
 
     use Role;
+
+    public function test()
+    {
+        return $this->permissions('Feedback');
+    }
+
 }

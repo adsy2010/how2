@@ -54,7 +54,6 @@ trait Role
             WHERE usergroupmembers.userID = 2
          * */
 
-
         return (count($permissions) > 0) ? true : false;
     }
 }

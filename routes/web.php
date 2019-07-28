@@ -22,6 +22,7 @@ Route::prefix('home')->group(function(){
 });
 Route::prefix('admin')->group(function (){
     Route::get('/', 'Admin\AdminController@dashboard')->name('admin.dashboard');
+    Route::get('logs', 'Admin\AdminController@logs')->name('admin.logs');
     Route::prefix('users')->group(function (){
         Route::get('/', 'Admin\UserController@listUsers')->name('admin.users.list');
         Route::get('{id}', 'Admin\UserController@showuser')->name('admin.users.view');
@@ -52,6 +53,7 @@ Route::prefix('admin')->group(function (){
         Route::get('/', 'ApprovalController@listSubmissions')->name('admin.approvals.list');
         Route::get('{id}', 'ApprovalController@showSubmission')->name('admin.approvals.view');
         Route::get('{id}/approve', 'ApprovalController@approveSubmission')->name('admin.approvals.approve');
+        Route::post('{id}/approve', 'ApprovalController@approveSubmission')->name('admin.approvals.approve.confirm');
         Route::get('{id}/reject', 'ApprovalController@declineSubmission')->name('admin.approvals.reject');
     });
     Route::prefix('categories')->group(function (){

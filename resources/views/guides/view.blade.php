@@ -42,6 +42,11 @@
         </fieldset>
 
         <hr>
+
+        @if(auth()->user()->id == $guide->publisher || auth()->user()->hasPermission('Administrator'))
+            {{-- Add a check to see if the guide is actually published --}}
+            <a class="btn btn-outline-primary float-right disabled" href="">Unpublish</a>
+        @endif
         @lang('guides.categoryLabel'): {{ $guide->categoryInfo->name }}<br>
         @lang('guides.tagLabel'): {{ (!empty($guide->tags)) ? $guide->tags : 'No tags defined for this guide' }}
 

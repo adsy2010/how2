@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Traits\Logging;
 use App\UserGroup;
 use App\UserGroupMember;
 use App\RolePermission;
@@ -13,7 +14,7 @@ use Exception;
 
 class UserGroupController extends Controller
 {
-
+    use Logging;
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

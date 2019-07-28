@@ -6,12 +6,15 @@ namespace App\Http\Controllers;
 
 use App\Approval;
 use App\Guide;
+use App\Traits\Logging;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
 class ApprovalController extends Controller
 {
+    use Logging;
+
     /**
      * Approval page and confirmation
      *
@@ -39,6 +42,7 @@ class ApprovalController extends Controller
                 return;  //redirect fail
             }
             //TODO: Log transaction
+            $this->createLog("Submission for guide {$guide->id} was approved.");
 
             return redirect()->to(Route('admin.approvals.list'))
                 ->with('success', 'Guide approved')
@@ -74,6 +78,7 @@ class ApprovalController extends Controller
                 return; // redirect fail
             }
             //TODO: Log transaction
+            $this->createLog("Submission for guide {$guide->id} was declined.");
 
             return redirect()->to(Route('admin.approvals.list'))
                     ->with('success', 'Declined guide')

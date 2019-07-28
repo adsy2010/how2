@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 
 
 use App\Category;
+use App\Traits\Logging;
 use Exception;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use Logging;
+
     public function showCreate()
     {
         return view('category.add', ['categories' => Category::all()->pluck('name', 'id')]);
@@ -37,12 +40,15 @@ class CategoryController extends Controller
                 'parent' => $request->parent
             ]);
 
+            $this->createLog("Created new category {$request->name}.");
+
             return redirect()->to(Route('admin.category.add'))
                 ->with('success', __('category.success-added'))
                 ->send();
         }
         catch (Exception $exception)
         {
+            $this->createLog('Failed to create new category.');
             return redirect()->to(Route('admin.category.add'))
                 ->withInput($request->all())
                 ->withErrors(__('category.error-added'))
@@ -61,12 +67,17 @@ class CategoryController extends Controller
             $id->name = $request->name;
             $id->parent = $request->parent;
             $id->save();
+
+            $this->createLog("Updated category {$id->name}.");
+
             return redirect()->to(Route('admin.category.edit', ['id' => $id->id]))
                 ->with('success', __('category.success-updated'))
                 ->send();
         }
         catch (Exception $exception)
         {
+            $this->createLog("Failed to update category {$id->name}.");
+
             return redirect()->to(Route('admin.category.edit', ['id' => $id->id]))
                 ->withInput($request->all())
                 ->withErrors(__('category.error-updated'))

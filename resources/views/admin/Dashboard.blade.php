@@ -21,6 +21,9 @@
             @if(auth()->user()->hasPermission('Approve Guides'))
                 <div class="col-md-4 col-sm-6" style="margin-bottom: 5px;"><a href="{{ Route('admin.approvals.list') }}" class="btn btn-primary btn-dashboard">@lang('admin.approvals')</a></div>
             @endif
+                <div class="col-md-4 col-sm-6" style="margin-bottom: 5px;"><a href="{{ Route('admin.logs') }}" class="btn btn-primary btn-dashboard">Logs</a></div>
+
+
         </div>
     </div>
 @endsection

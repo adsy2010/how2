@@ -10,6 +10,7 @@ use App\Feedback;
 use App\Guide;
 use App\Steps;
 use App\SupplementaryContent;
+use App\Traits\Logging;
 use App\Traits\Role;
 use App\User;
 use Exception;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 class GuideController extends Controller
 {
     use Role;
+    use Logging;
     public function showCreate()
     {
         if($this->permissions('Create Submission')){
@@ -125,15 +127,24 @@ class GuideController extends Controller
             'guide' => $guide->id
         ]);
 
+        $this->createLog("Submission for guide {$guide->id} was created.");
+
         return redirect()->to(Route('guide.view', ['id' => $guide->id])); //redirect on success or failure
 
     }
 
     public function show(Request $request, Guide $id)
     {
-        //TODO: Pull guide and steps with supplementary content
-        //if($id->isEmpty())
-          //  return redirect()->to(Route('root'))->withErrors('Guide does not exist')->send();
+
+        //TODO: Add a check to see if current user is admin/publisher and check if its published else throw back to the main page
+        if(!($id->published == 1)){
+            if(!(Auth::id() == $id->publisher || auth()->user()->hasPermission('Administrator')))
+            {
+                return redirect()->to(Route('root'))->withErrors('Selected guide is not available at this time')->send();
+            }
+        }
+
+
         return view('guides.view', ['guide' => $id]);
     }
 
@@ -168,7 +179,7 @@ class GuideController extends Controller
 
     public function feedback(Request $request, Guide $id)
     {
-        if(!$this->permissions('Feedback'))
+        if(auth()->user()->hasPermission('Feedback'))
         {
             if(!$request->isMethod('post'))
                 return redirect()->to(Route('guide.view', ['id' => $id->id])) //TODO: Fill route name here
@@ -185,11 +196,13 @@ class GuideController extends Controller
                     'comment' => $request->feedback
                 ]);
 
+                $this->createLog("Feedback for guide {$id->id} was created.");
+
                 return redirect()->to(Route('guide.view', ['id' => $id->id]))
                     ->with('success', __('guides.success-feedback'))
                     ->send();
             }
-            return redirect()->to(Route('guide.view', ['id' => $id->id]))->withErrors($validation);//TODO: return errors
+            return redirect()->to(Route('guide.view', ['id' => $id->id]))->withErrors($validation)->send();//TODO: return errors
         }
         return redirect()->to(Route('guide.view', ['id' => $id->id]))
             ->withErrors('You do not have permission to provide feedback.');

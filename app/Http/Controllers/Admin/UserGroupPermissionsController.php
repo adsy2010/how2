@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Permissions;
+use App\Traits\Logging;
 use App\UserGroup;
 use App\RolePermission;
 use App\RolePermissions;
@@ -14,7 +15,7 @@ use Mockery\Exception;
 
 class UserGroupPermissionsController extends Controller
 {
-
+    use Logging;
     public function listPermissions()
     {
         $permissions = RolePermission::with('rolePermissions')->get();
@@ -30,9 +31,12 @@ class UserGroupPermissionsController extends Controller
         if(RolePermissions::create([
             'groupID' => $id->id,
             'permissionID' => $request->group
-        ]))
+        ])){
+            $this->createLog("Assigned permission {$request->group} to group {$id->name}.");
             return redirect()->back()->with('success', 'The permission was associated with the group successfully.')->send();
+        }
 
+        $this->createLog("Failed to assign permission {$request->group} to group {$id->name}.");
 
         return redirect()->back()->withErrors('The permission could not be associated with the group.')->send();
     }
@@ -49,9 +53,12 @@ class UserGroupPermissionsController extends Controller
     {
         //setup some logic to confirm what your doing
         $d = RolePermissions::where('groupID', $id->id)->where('permissionID', $request->permissionID)->delete();
-        if($d)
-            return redirect()->to(Route('admin.usergroups.edit', ['id' => $id->id]))->with('success', 'Successfully removed permission from group.')->send();
+        if($d){
+            $this->createLog("Unassigned permission {$request->permissionID} from group {$id->name}.");
 
+            return redirect()->to(Route('admin.usergroups.edit', ['id' => $id->id]))->with('success', 'Successfully removed permission from group.')->send();
+        }
+        $this->createLog("Failed to Unassign permission {$request->permissionID} from group {$id->name}.");
         return redirect()->to(Route('admin.usergroups.edit', ['id' => $id->id]))->withErrors('There was a problem removing the permission from the group.');
     }
 
@@ -73,6 +80,7 @@ class UserGroupPermissionsController extends Controller
             RolePermission::create([
                 'name' => $request->name
             ]);
+            $this->createLog("Created new permission {$request->name}.");
             return redirect()->to(Route('admin.permissions.list'))
                 ->with('success', __('admin.success-addedpermission'))
                 ->send();
@@ -111,7 +119,7 @@ class UserGroupPermissionsController extends Controller
         }
 
         $id->save(); //might as well save it even if there's no changes just in case.
-
+        $this->createLog("Updated permission {$id->name}.");
         //TODO: Update language references if necessary
         return redirect()->to(Route('admin.permissions.list'))
             ->withInput($request->all())
@@ -133,6 +141,8 @@ class UserGroupPermissionsController extends Controller
 
         try{
             $id->delete();
+
+            $this->createLog('Removed permission from the database.');
 
             //TODO: Update language references if necessary
             return redirect()->to(Route('admin.permissions.list'))

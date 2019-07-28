@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container">
+        @include('common.errors')
         <div class="jumbotron">
             <h4>Dashboard</h4>
             <hr>
