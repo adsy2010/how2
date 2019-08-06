@@ -108,7 +108,7 @@ class UserGroupController extends Controller
     public function deleteGroup(Request $request, UserGroup $id)
     {
         //TODO: Display confirmation, consider consolidating with confirm method
-        return view('admin.usergroupdeleteconfirm', ['group' => $id]);
+        return view('admin.UserGroupDeleteConfirm', ['group' => $id]);
     }
 
     /**

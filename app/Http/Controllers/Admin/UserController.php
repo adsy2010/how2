@@ -19,13 +19,13 @@ class UserController extends Controller
      */
     public function listUsers()
     {
-        return view('admin.users', ['users' => User::paginate(15)]);
+        return view('admin.Users', ['users' => User::paginate(15)]);
     }
 
     public function showUser(Request $request, User $id)
     {
         $groups = UserGroup::whereNotIn('id', $id->usergroups()->pluck('groupID'))->orderBy('name', 'ASC')->pluck('name', 'id');
-        return view('admin.user', ['user' => $id, 'groups' => $groups]);
+        return view('admin.User', ['user' => $id, 'groups' => $groups]);
     }
 
     /**

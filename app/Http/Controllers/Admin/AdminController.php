@@ -26,7 +26,7 @@ class AdminController extends Controller
     public function dashboard()
     {
         if($this->permissions('Administrator')){
-            return view('admin.dashboard');
+            return view('admin.Dashboard');
         }
         return redirect()->to(Route('home'))->withErrors('You do not have the Administrator privilege.');
     }
