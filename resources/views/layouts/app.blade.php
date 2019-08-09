@@ -42,7 +42,7 @@
                             <li class="nav-item"><a class="nav-link" href="{{ Route('guide.add') }}">Make submission</a></li>
                         @endif
                         <li class="nav-item"><a class="nav-link" href="{{ Route('category.list') }}">Categories</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">My lists</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ Route('guidelist.list') }}">My lists</a></li>
                     </ul>
                     @endauth
 

@@ -89,7 +89,7 @@ Route::prefix('guides')->group(function ()
     Route::get('user/{id}', 'GuideController@user')->name('guides.user');
 });
 Route::prefix('guidelist')->group(function () {
-    Route::get('/')->name('guidelist.list');
+    Route::get('/', function (){ return view('guidelists.GuideLists'); })->name('guidelist.list');
     Route::get('add')->name('guidelist.add');
     Route::get('{id}')->name('guidelist.view');
     Route::get('{id}/update')->name('guidelist.update');
