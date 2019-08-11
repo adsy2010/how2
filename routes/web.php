@@ -96,5 +96,5 @@ Route::prefix('guidelist')->group(function () {
     Route::get('{id}/delete')->name('guidelist.delete');
 });
 
-Route::get('/search')->name('search.view');
+Route::post('/search', 'SearchController@search')->name('search.view');
 Route::get('/test', 'HomeController@test');

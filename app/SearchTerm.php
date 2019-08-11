@@ -14,6 +14,6 @@ class SearchTerm extends Model
 
     public function cache()
     {
-        return $this->hasMany('App\SearchCache', 'termId', 'id');
+        return $this->hasMany('App\SearchCache', 'termId', 'id')->orderBy('rank', 'DESC');
     }
 }
