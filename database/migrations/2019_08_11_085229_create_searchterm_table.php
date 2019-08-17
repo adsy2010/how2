@@ -16,7 +16,7 @@ class CreateSearchtermTable extends Migration
         Schema::create('searchterm', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('term');
-            $table->timestamp('lastSearch');
+            $table->timestamp('lastSearch')->nullable();
             $table->timestamps();
         });
     }

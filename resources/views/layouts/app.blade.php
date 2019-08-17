@@ -44,7 +44,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ Route('category.list') }}">Categories</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ Route('guidelist.list') }}">My lists</a></li>
                     </ul>
-                    {{ Form::open(['route' => 'search', 'class' => 'form-inline my-2 my-lg-0']) }}
+                    {{ Form::open(['route' => 'search.view', 'class' => 'form-inline my-2 my-lg-0']) }}
                     {{ Form::search('searchterm', null, ['placeholder' => 'Search', 'aria-label' => 'Search', 'class' => 'form-control mr-sm-2']) }}
                     {{ Form::submit('Search', ['class' => 'btn btn-outline-success my-2 my-sm-0']) }}
                     {{ Form::close() }}

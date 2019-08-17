@@ -16,7 +16,7 @@ class Steps extends Model
     protected $table = 'steps';
     protected $fillable = ['stepNumber', 'stepContent', 'guide'];
 
-    public function guide()
+    public function guideInfo()
     {
         return $this->hasOne('App\Guide', 'id', 'guide');
     }

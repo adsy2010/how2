@@ -8,7 +8,7 @@ use App\Guide;
 use App\SearchCache;
 use App\SearchTerm;
 use App\Steps;
-use http\Client\Request;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
@@ -20,7 +20,7 @@ class SearchController extends Controller
     public function basicSearch($searchterm)
     {
         $term = SearchTerm::where('term', $searchterm)->with('cache')->first();
-        if(count($term) > 0)
+        if(!empty($term))
         {
             // TODO: check date last updated and determine whether advanced search needs rerunning
             return $term;
@@ -40,7 +40,8 @@ class SearchController extends Controller
         // Guide name
         // Guide step
 
-        $termId = SearchTerm::create(['term' => $term])->save();
+        $termId = SearchTerm::create(['term' => $term]);
+        $termId->save();
         $terms = explode(' ', $term);
 
         foreach ($terms as $t)
@@ -50,7 +51,7 @@ class SearchController extends Controller
         }
 
         $guides = Guide::orWhere($guideConditions)->get();
-        $steps = Steps::orWhere($stepConditions)->get();
+        $steps = Steps::orWhere($stepConditions)->with('guideInfo')->get();
         $guidecache = array();
 
         foreach($guides as $g)
@@ -61,7 +62,10 @@ class SearchController extends Controller
             {
                 if(in_array($exploded, $terms))
                 {
-                    $guidecache[$g->id] = $guidecache[$g->id]+3;
+                    if($g->published == 1)
+                    {
+                        $guidecache[$g->id] = (!isset($guidecache[$g->id])) ? 3 : $guidecache[$g->id]+3;
+                    }
                 }
             }
         }
@@ -69,12 +73,16 @@ class SearchController extends Controller
         foreach ($steps as $s)
         {
             //COMPILE GUIDE ID
-            $stepExplode = explode(" ", $g->name);
+            $stepExplode = explode(" ", $s->stepContent);
             foreach ($stepExplode as $exploded)
             {
+                //replace in array with an array filter
                 if (in_array($exploded, $terms))
                 {
-                    $guidecache[$s->guide->id]++;
+                    if($s->guideInfo->published == 1)
+                    {
+                        $guidecache[$s->guideInfo->id] = (!isset($guidecache[$s->guideInfo->id])) ? 1 : $guidecache[$s->guideInfo->id] + 1;
+                    }
                 }
             }
         }
@@ -112,7 +120,7 @@ class SearchController extends Controller
 
     public function search(Request $request)
     {
-        $results = $this->basicSearch($request->term);
+        $results = $this->basicSearch($request->searchterm);
         return view('searchresults', ['results' => $results]);
     }
 }
