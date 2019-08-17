@@ -23,6 +23,7 @@ Route::prefix('home')->group(function(){
 Route::prefix('admin')->group(function (){
     Route::get('/', 'Admin\AdminController@dashboard')->name('admin.dashboard');
     Route::get('logs', 'Admin\AdminController@logs')->name('admin.logs');
+    Route::get('search/recache', 'SearchController@reCache')->name('admin.recache');
     Route::prefix('users')->group(function (){
         Route::get('/', 'Admin\UserController@listUsers')->name('admin.users.list');
         Route::get('{id}', 'Admin\UserController@showuser')->name('admin.users.view');

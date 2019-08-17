@@ -31,17 +31,21 @@ class SearchController extends Controller
     /**
      * Perform a thorough search based on search keyword request and save a cached copy
      * @param string $term
+     * @param SearchTerm null $termId
      * @return SearchTerm $termId
      */
-    public function advancedSearch($term)
+    public function advancedSearch($term, SearchTerm $termId = null)
     {
         //gather data
         // Category name (later)
         // Guide name
         // Guide step
 
-        $termId = SearchTerm::create(['term' => $term]);
-        $termId->save();
+        if($termId == null){
+            $termId = SearchTerm::create(['term' => $term]);
+            $termId->save();
+        }
+
         $terms = explode(' ', $term);
 
         foreach ($terms as $t)
@@ -111,11 +115,43 @@ class SearchController extends Controller
         // keywords in steps
         // rank score 1 per keyword found
         //
+        //tags??
 
         // max results 50 per search
         // remove old results if any exist for keyword chain
         // repopulate
         //
+    }
+
+    /**
+     * Keep search terms but recache database
+     * Perform this rarely especially on large databases as this could take a while
+     */
+    public function reCache()
+    {
+        $this->clearCache();
+        foreach (SearchTerm::all() as $searchTerm)
+        {
+            $this->advancedSearch($searchTerm->term, $searchTerm);
+        }
+        return redirect()->back()->with('success', 'Successfully recached search terms')->send();
+    }
+
+    /**
+     * Clear search cache except search terms
+     */
+    public function clearCache()
+    {
+        SearchCache::truncate();
+    }
+
+    /**
+     * Remove all search entries and cache
+     */
+    public function clearSearch()
+    {
+        SearchTerm::truncate();
+        SearchCache::truncate();
     }
 
     public function search(Request $request)
