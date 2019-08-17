@@ -23,13 +23,18 @@ Route::prefix('home')->group(function(){
 Route::prefix('admin')->group(function (){
     Route::get('/', 'Admin\AdminController@dashboard')->name('admin.dashboard');
     Route::get('logs', 'Admin\AdminController@logs')->name('admin.logs');
-    Route::get('search/recache', 'SearchController@reCache')->name('admin.recache');
     Route::prefix('users')->group(function (){
         Route::get('/', 'Admin\UserController@listUsers')->name('admin.users.list');
         Route::get('{id}', 'Admin\UserController@showuser')->name('admin.users.view');
         //Route::get('{id}/usergroups', function (){ return; })->name('admin.usersgroups.list');
         Route::post('{id}/assigngroup', 'Admin\UserController@addMemberToGroup')->name('admin.usersgroups.assign');
         Route::post('{id}/unassigngroup', 'Admin\UserController@removeMemberFromGroup')->name('admin.usersgroups.unassign');
+    });
+    Route::prefix('search')->group(function() {
+        Route::get('/', 'SearchController@dashboard')->name('admin.search.dashboard');
+        Route::get('clear/cache', 'SearchController@clearCache')->name('admin.search.clear.cache');
+        Route::get('clear/terms', 'SearchController@clearSearch')->name('admin.search.clear.terms');
+        Route::get('recache', 'SearchController@reCache')->name('admin.search.recache');
     });
     Route::prefix('usergroups')->group(function (){
         /** Manage user groups */
@@ -98,4 +103,5 @@ Route::prefix('guidelist')->group(function () {
 });
 
 Route::post('/search', 'SearchController@search')->name('search.view');
+Route::get('/search/{id}', 'SearchController@searchId')->name('search.view.id');
 Route::get('/test', 'HomeController@test');

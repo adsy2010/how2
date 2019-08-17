@@ -51,10 +51,12 @@ class SearchController extends Controller
         foreach ($terms as $t)
         {
             $guideConditions[] = ['name', 'like', "%{$t}%"];
+            $guideTagsConditions[] = ['tags', 'like', "%{$t}%"];
             $stepConditions[] = ['stepContent', 'like', "%{$t}%"];
         }
 
         $guides = Guide::orWhere($guideConditions)->get();
+        $tags = Guide::orWhere($guideTagsConditions)->get();
         $steps = Steps::orWhere($stepConditions)->with('guideInfo')->get();
         $guidecache = array();
 
@@ -69,6 +71,21 @@ class SearchController extends Controller
                     if($g->published == 1)
                     {
                         $guidecache[$g->id] = (!isset($guidecache[$g->id])) ? 3 : $guidecache[$g->id]+3;
+                    }
+                }
+            }
+        }
+
+        foreach ($tags as $tag)
+        {
+            $tagExplode = explode(",", $tag->tags);
+            foreach ($tagExplode as $exploded)
+            {
+                if (in_array($exploded, $terms))
+                {
+                    if($tag->published == 1)
+                    {
+                        $guidecache[$tag->id] = (!isset($guidecache[$tag->id])) ? 2 : $guidecache[$tag->id]+2;
                     }
                 }
             }
@@ -129,7 +146,7 @@ class SearchController extends Controller
      */
     public function reCache()
     {
-        $this->clearCache();
+        $this->clearCache(1); // anything sent prevents redirecting too early
         foreach (SearchTerm::all() as $searchTerm)
         {
             $this->advancedSearch($searchTerm->term, $searchTerm);
@@ -139,10 +156,13 @@ class SearchController extends Controller
 
     /**
      * Clear search cache except search terms
+     * @param null $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function clearCache()
+    public function clearCache($id = null)
     {
         SearchCache::truncate();
+        if($id == null) return redirect()->back()->with('success', 'Successfully cleared search cache')->send();
     }
 
     /**
@@ -152,11 +172,25 @@ class SearchController extends Controller
     {
         SearchTerm::truncate();
         SearchCache::truncate();
+        return redirect()->back()->with('success', 'Successfully cleared all search terms')->send();
     }
 
     public function search(Request $request)
     {
         $results = $this->basicSearch($request->searchterm);
         return view('searchresults', ['results' => $results]);
+    }
+
+    public function searchId(Request $request, SearchTerm $id)
+    {
+        if(!empty($id)) {
+            return view('searchresults', ['results' => $id]);
+        }
+    }
+
+    public function dashboard(Request $request)
+    {
+        $terms = SearchTerm::with('cache')->paginate(50);
+        return view('admin.SearchDashboard', ['terms' =>  $terms]);
     }
 }
