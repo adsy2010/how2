@@ -22,15 +22,25 @@
                 <p class="lead">Guide lists you have created, newest first will appear below.</p>
                 <table class="table table-hover">
                     <tr>
-                        <th>Name</th>
-                        <th>Action</th>
+                        <th>@lang('generic.name')</th>
+                        <th>@lang('generic.actions')</th>
                     </tr>
 
-                    <tr>
-                    <tr>
-                        <td colspan="2">You currently have no guide lists.</td>
+                    @foreach($myLists as $list)
+                    <tr class="clickable-row" data-href="{{ Route('guidelist.view', ['id' => $list->id]) }}">
+                        <td>{{ $list->name }}</td>
+                        <td width="250px">
+                            <a href="" title="@lang('generic.edit')" class="btn btn-primary"><span class="fas fa-edit"></span></a>
+                            <a href="" title="@lang('generic.share')" class="btn btn-secondary"><span class="fas fa-share"></span></a>
+                            <a href="{{ Route('guidelist.deleteconfirm', ['id' => $list->id]) }}" title="@lang('generic.delete')" class="btn btn-danger"><span class="fas fa-trash"></span></a>
+                        </td>
                     </tr>
-                    </tr>
+                    @endforeach
+                    @if(empty($myLists))
+                        <tr>
+                            <td colspan="2">You currently have no guide lists.</td>
+                        </tr>
+                    @endif
                 </table>
                 {{ Form::open(['route' => 'guidelist.add']) }}
                 <div class="row">

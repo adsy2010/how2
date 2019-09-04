@@ -3,15 +3,25 @@
 @section('content')
     <div class="container">
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href=""></a></li>
-                <li class="breadcrumb-item active" aria-current="page"></li>
-            </ol>
-        </nav>
+        @php
+            //separating the data from the template
+            $breadcrumbs = [
+                ['title' => __('generic.home'), 'route' => 'root'],
+                ['title' => 'My Guide Lists', 'route' => 'guidelist.list'],
+                ['title' => $guidelist->name, 'route' => 'guidelist.view']
+            ];
+        @endphp
         @include('common.errors')
         @include('common.success')
-        <h2></h2>
+        @include('common.breadcrumb')
+
+
+        <h2>{{ $guidelist->name }}</h2>
         <hr>
+        @foreach($guidelist->guidelistItems as $items)
+            @foreach($items->guideInfo as $guide)
+                {{ $guide->name }}
+            @endforeach
+        @endforeach
     </div>
 @endsection

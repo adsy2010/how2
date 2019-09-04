@@ -13,6 +13,10 @@ return [
     'updated' => 'Updated',
     'actions' => 'Actions',
 
+    'share' => 'Share',
+    'delete' => 'Delete',
+    'edit' => 'Edit',
+
     'home' => 'Home',
 
     'required' => '<span style="color:red;">*</span>'

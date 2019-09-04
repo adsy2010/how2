@@ -133,17 +133,25 @@ class GuideController extends Controller
 
     }
 
-    public function show(Request $request, Guide $id)
+    /**
+     * Shows a guide loaded from the database if its published or not with the correct permissions
+     * Returns errors if guide is missing or permissions dictate otherwise
+     *
+     * @param Request $request Request ID used to load Guide
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function show(Request $request)
     {
+        $id = Guide::find($request->id);
+        
+        if($id == null) return redirect()->to(Route('root'))->withErrors('Selected guide is not available at this time')->send();
 
-        //TODO: Add a check to see if current user is admin/publisher and check if its published else throw back to the main page
         if(!($id->published == 1)){
-            if(!(Auth::id() == $id->publisher || auth()->user()->hasPermission('Administrator')))
+            if(!(Auth::id() == $id->publisher || Auth::user()->hasPermission('Administrator')))
             {
                 return redirect()->to(Route('root'))->withErrors('Selected guide is not available at this time')->send();
             }
         }
-
 
         return view('guides.view', ['guide' => $id]);
     }

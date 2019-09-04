@@ -20,7 +20,9 @@ class ListController extends Controller
      */
     public function myLists()
     {
-        $myLists = GuideList::where('user', Auth::id())->get();
+        $myLists = GuideList::where('user', Auth::id())->orderBy('created_at', 'DESC')->get();
+
+        return view('guidelists.GuideLists', ['myLists' => $myLists]);
     }
 
     /**
@@ -40,6 +42,8 @@ class ListController extends Controller
             'name' => $request->name,
             'user' => Auth::id()
         ]);
+
+        return redirect()->back()->with('success', "Created new guide list `{$request->name}` ");
     }
 
     /**
@@ -68,22 +72,26 @@ class ListController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function removeList(Request $request, GuideList $guideList)
+    public function removeList(Request $request, GuideList $id)
     {
         if(!$request->isMethod('post'))
-            return redirect()->to(Route('')) //TODO: Fill route name here
-            ->withErrors(__('admin.error-badmethod'))
-                ->send();
+        {
+            return view('guidelists.delete', ['guidelist' => $id]);
+        }
+        else
+        {
+            $id->delete(); //TODO: Delete list items too
+        }
 
-        $guideList->delete(); //TODO: Delete list items too
     }
 
     /**
      * Show a specific list
      */
-    public function showList(Request $request, GuideList $guideList)
+    public function showList(Request $request, GuideList $id)
     {
         //Get guide list items
+        return view('guidelists.GuideList', ['guidelist' => $id]);
     }
 
     /**

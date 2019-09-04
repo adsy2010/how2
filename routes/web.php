@@ -82,7 +82,7 @@ Route::prefix('categories')->group(function (){
     Route::get('tree', 'CategoryController@listCategoryTree')->name('category.tree');
 //Route::get('/categories/{id}', 'CategoryController@listGuidesInCategory')->name('category.view');
 });
-Route::prefix('guide')->group(function (){
+Route::group(['prefix' => 'guide', 'middleware' => 'auth'], function (){
     Route::get('new', 'GuideController@showCreate')->name('guide.add')->middleware('auth');
     Route::post('new', 'GuideController@submit')->name('guide.submit');
     Route::get('{id}', 'GuideController@show')->name('guide.view');
@@ -95,11 +95,12 @@ Route::prefix('guides')->group(function ()
     Route::get('user/{id}', 'GuideController@user')->name('guides.user');
 });
 Route::prefix('guidelist')->group(function () {
-    Route::get('/', function (){ return view('guidelists.GuideLists'); })->name('guidelist.list');
-    Route::get('add')->name('guidelist.add');
-    Route::get('{id}')->name('guidelist.view');
+    Route::get('/', 'ListController@myLists')->name('guidelist.list');
+    Route::post('add', 'ListController@createList')->name('guidelist.add');
+    Route::get('{id}', 'ListController@showList')->name('guidelist.view');
     Route::get('{id}/update')->name('guidelist.update');
-    Route::get('{id}/delete')->name('guidelist.delete');
+    Route::get('{id}/delete', 'ListController@removeList')->name('guidelist.deleteconfirm');
+    Route::post('{id}/delete')->name('guidelist.delete');
 });
 
 Route::post('/search', 'SearchController@search')->name('search.view');
